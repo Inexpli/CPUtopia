@@ -1,0 +1,50 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - ./backend:/var/www/symfony
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./docker/nginx
+    volumes:
+      - ./backend:/var/www/symfony
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   volumes:
+  #     - ./frontend:/app
+  #   working_dir: /app
+  #   command: npm start
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
