@@ -12,16 +12,25 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $category = new Category();
-        $category->setName('Electronics');
+        $category->setName('GPU');
 
         $manager->persist($category);
 
         $product = new Product();
         $product->setCategory($category); 
-        $product->setName('Product one');
+        $product->setName('Product two');
         $product->setDescription('Description');
-        $product->setPrice('10.15'); 
-        $product->setStock(10);
+        $product->setPrice('30.99'); 
+        $product->setStock(5);
+
+        $manager->persist($product);
+
+        $product = new Product();
+        $product->setCategory($category); 
+        $product->setName('Product two');
+        $product->setDescription('Description');
+        $product->setPrice('36.99'); 
+        $product->setStock(3);
 
         $manager->persist($product);
 

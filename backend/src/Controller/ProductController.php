@@ -16,4 +16,13 @@ final class ProductController extends AbstractController
             'products' => $repository->findAll(),
         ]);
     }
+
+    #[Route('/product/{slug}', name: 'app_product_show')]
+    public function show(string $slug, ProductRepository $repository): Response
+    {
+        $product = $repository->findOneBy(['slug' => $slug]);
+        return $this->render('product/show.html.twig', [
+            'product' => $product
+        ]);
+    }
 }
