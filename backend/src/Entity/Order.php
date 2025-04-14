@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`order`')]
+#[ORM\Index(columns: ['user_id'])]
 class Order
 {
     #[ORM\Id]
@@ -19,7 +19,7 @@ class Order
 
     #[Assert\Type(User::class)]
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?User $user = null;
 
     #[Gedmo\Timestampable(on:"create")]
@@ -45,7 +45,7 @@ class Order
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 

@@ -9,6 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Index(columns: ['category_id'])]
 class Product
 {
     #[ORM\Id]
@@ -18,8 +19,9 @@ class Product
 
     #[Assert\Type(Category::class)]
     #[ORM\ManyToOne(targetEntity: Category::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Category $category = null;
+
 
     #[Assert\Type('string')]
     #[Assert\NotBlank]
@@ -58,7 +60,7 @@ class Product
         return $this->category;
     }
 
-    public function setCategory(Category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 

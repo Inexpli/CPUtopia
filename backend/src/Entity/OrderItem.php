@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
+#[ORM\Index(columns: ['order_id', 'product_id'])]
 class OrderItem
 {
     #[ORM\Id]
@@ -17,16 +18,16 @@ class OrderItem
 
     #[Assert\Type(Order::class)]
     #[ORM\ManyToOne(targetEntity: Order::class)]
-    #[ORM\Column]
+    #[ORM\JoinColumn(name: "order_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Order $order = null;
 
     #[Assert\Type(Product::class)]
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    #[ORM\Column]
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Product $product = null;
 
     #[Assert\Type('integer')]
-    #[Assert\GreaterThanOrEqual(0)]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -45,7 +46,7 @@ class OrderItem
         return $this->order;
     }
 
-    public function setOrder(Order $order): static
+    public function setOrder(?Order $order): static
     {
         $this->order = $order;
 
@@ -57,7 +58,7 @@ class OrderItem
         return $this->product;
     }
 
-    public function setProduct(Product $product): static
+    public function setProduct(?Product $product): static
     {
         $this->product = $product;
 
