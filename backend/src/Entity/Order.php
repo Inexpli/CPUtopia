@@ -27,11 +27,13 @@ class Order
     private ?\DateTimeImmutable $order_date = null;
 
     #[Assert\Type('float')]
+    #[Assert\NotBlank]
     #[Assert\Positive]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $total_amount = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 20)]
     private ?string $status = null;
 

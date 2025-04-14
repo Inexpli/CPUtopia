@@ -27,11 +27,13 @@ class OrderItem
     private ?Product $product = null;
 
     #[Assert\Type('integer')]
+    #[Assert\NotBlank]
     #[Assert\Positive]
     #[ORM\Column]
     private ?int $quantity = null;
 
     #[Assert\Type('float')]
+    #[Assert\NotBlank]
     #[Assert\Positive]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;

@@ -16,18 +16,22 @@ class User
     private ?int $id = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $first_name = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $last_name = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 100)]
     private ?string $email = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 

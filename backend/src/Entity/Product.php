@@ -33,9 +33,10 @@ class Product
     private ?string $description = null;
 
     #[Assert\Type('float')]
+    #[Assert\NotBlank]
     #[Assert\Positive]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $price = null;
+    private ?float $price = null;
 
     #[Assert\Type('integer')]
     #[Assert\GreaterThanOrEqual(0)]
@@ -91,12 +92,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 

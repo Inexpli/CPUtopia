@@ -15,6 +15,7 @@ class Category
     private ?int $id = null;
 
     #[Assert\Type('string')]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
