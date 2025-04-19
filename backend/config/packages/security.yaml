@@ -14,15 +14,21 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/api
+            stateless: false
             lazy: true
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                always_remember_me: true  
             json_login:
-                check_path: api_login
+                check_path: /api/user/login
                 username_path: email
                 password_path: password
             logout:
-                path: api_logout
-                # where to redirect after logout
-                # target: app_any_route
+                path: /api/user/logout
+                invalidate_session: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
