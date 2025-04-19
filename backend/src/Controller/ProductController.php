@@ -11,16 +11,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ProductController extends AbstractController
 {
-    #[Route('api/product', name: 'api_product_index', methods: ['GET'])]
+    #[Route('api/product', name: 'products', methods: ['GET'])]
     public function index(ProductRepository $repository): Response
     {
         return $this->json($repository->findAll(), Response::HTTP_OK);
     }
 
-    #[Route('api/product/add', name: 'api_product_add', methods: ['POST'])]
+
+    #[Route('api/product/add', name: 'product_add', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function add(
         Request $request,
         EntityManagerInterface $manager,
@@ -59,7 +62,8 @@ final class ProductController extends AbstractController
         return $this->json(['message' => 'Product added successfully'], Response::HTTP_CREATED);
     }
 
-    #[Route('api/product/{id}/edit', name: 'api_product_edit', methods: ['PUT', 'PATCH'])]
+    #[Route('api/product/{id}', name: 'api_product_edit', methods: ['PUT', 'PATCH'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(
         int $id,
         Request $request,
@@ -103,6 +107,7 @@ final class ProductController extends AbstractController
     }
 
     #[Route('api/product/{id}', name: 'api_product_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(
         int $id,
         ProductRepository $repository,

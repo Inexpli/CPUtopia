@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CategoryController extends AbstractController
 {
@@ -20,6 +21,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('api/category/add', name: 'api_category_add', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function add(
         Request $request,
         EntityManagerInterface $manager,
@@ -47,7 +49,8 @@ final class CategoryController extends AbstractController
         return $this->json(['message' => 'Category added successfully'], Response::HTTP_CREATED);
     }
 
-    #[Route('api/category/{id}/edit', name: 'api_category_edit', methods: ['PUT', 'PATCH'])]
+    #[Route('api/category/{id}', name: 'api_category_edit', methods: ['PUT', 'PATCH'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function update(
         int $id,
         Request $request,
@@ -79,6 +82,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('api/category/{id}', name: 'api_category_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(
         int $id,
         CategoryRepository $repository,
