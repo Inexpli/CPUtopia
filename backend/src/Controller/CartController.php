@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends AbstractController
 {
@@ -26,6 +27,23 @@ class CartController extends AbstractController
     {
         return $this->json($cartService->getCart());
     }
+
+    #[Route('api/cart/remove/{id}', name: 'api_cart_remove', methods: ['POST'])]
+    public function remove(int $id, CartService $cartService): JsonResponse
+    {
+        $result = $cartService->remove($id);
+        if (!$result) {
+            return $this->json(
+                ['error' => 'Product not found in cart'],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+        return $this->json(
+            ['message' => 'Product removed from cart'],
+            Response::HTTP_OK
+        );
+    }
+
 
     #[Route('api/cart/clear', name: 'api_cart_clear', methods: ['POST'])]
     public function clear(CartService $cartService): JsonResponse
