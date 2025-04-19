@@ -25,7 +25,8 @@ class CartController extends AbstractController
     #[Route('api/cart', name: 'api_cart_view', methods: ['GET'])]
     public function view(CartService $cartService): JsonResponse
     {
-        return $this->json($cartService->getCart());
+        $items = $cartService->getCart();
+        return $this->json($items, context: ['groups' => ['cart']]);
     }
 
     #[Route('api/cart/remove/{id}', name: 'api_cart_remove', methods: ['POST'])]

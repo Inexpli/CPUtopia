@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Index(columns: ['category_id'])]
@@ -23,15 +24,18 @@ class Product
     private ?Category $category = null;
 
 
+    #[Groups(['cart'])]
     #[Assert\Type('string')]
     #[Assert\NotBlank]
     #[ORM\Column(length: 150)]
     private ?string $name = null;
 
+    #[Groups(['cart'])]
     #[Assert\Type('string')]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
+    #[Groups(['cart'])]
     #[Assert\Type('float')]
     #[Assert\NotBlank]
     #[Assert\Positive]
