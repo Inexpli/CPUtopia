@@ -1,5 +1,34 @@
 # Dokumentacja API CPUtopia
 
+## 🚀 Przygotowanie i uruchomienie środowiska
+1. **Sklonuj repozytorium**
+   ```bash
+   git clone https://github.com/Inexpli/CPUtopia.git
+   cd CPUtopia/backend
+   ```
+2. **Skopiuj i skonfiguruj plik środowiskowy**
+   ```bash
+   cp .env .env.local
+   # Edytuj .env.local: ustaw DATABASE_URL, SECRET
+   ```
+3. **Zainstaluj zależności PHP**
+   ```bash
+   composer install
+   ```
+4. **Zbuduj i uruchom kontenery Docker** (jeśli używasz Docker Compose):
+   ```bash
+   docker-compose up -d
+   docker-compose exec php php bin/console doctrine:database:create
+   docker-compose exec php php bin/console doctrine:migrations:migrate
+   ```
+5. **Sprawdź działanie**
+   - Backend dostępny pod: `http://localhost:8080`
+   - Testuj endpointy zgodnie z dokumentacją poniżej.
+
+---
+
+# Dokumentacja API CPUtopia
+
 Poniżej znajduje się pełna dokumentacja endpointów dostępnych w backendzie aplikacji CPUtopia. Tester powinien korzystać z poniższych informacji, aby poprawnie wykonywać żądania i oceniać odpowiedzi.
 
 ---
