@@ -34,7 +34,8 @@ class UserController extends AbstractController
         ], JsonResponse::HTTP_OK);
     }
 
-    #[Route('api/user/users/', name: 'users', methods: ['GET'])]
+    #[Route('api/user/', name: 'users', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $repository) {
         return $this->json($repository->findAll(), JsonResponse::HTTP_OK);
     }
