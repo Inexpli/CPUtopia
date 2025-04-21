@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use LogicException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class OrderService
 {
@@ -31,41 +32,26 @@ class OrderService
     }
 
     private const CART_KEY = 'cart';
-    private const ORDER_KEY = 'order';
 
 
     public function index(): array {
         $user = $this->security->getUser();
 
-        if($user) {
-            $cartItems = $this->orderRepository->findBy(['user' => $user]);
-
-            $items = [];
-            foreach ($cartItems as $cartItem) {
-                $product = $cartItem->getProduct();
-                $items[] = [
-                    'product'  => $product,
-                    'quantity' => $cartItem->getQuantity(),
-                    'total'    => $product->getPrice() * $cartItem->getQuantity(),
-                    'date'     => $product->getOrderDate(),
-                ];
-            }
+        if(!$user) {
+            throw new UnauthorizedHttpException('You are not logged in');
         }
-        else {
-            $order = $this->session->get(self::ORDER_KEY, []);
 
-            $items = [];
+        $cartItems = $this->orderRepository->findBy(['user' => $user]);
 
-            foreach ($order as $productId => $quantity) {
-                $product = $this->productRepository->find($productId);
-                if ($product) {
-                    $items[] = [
-                        'product' => $product,
-                        'quantity' => $quantity,
-                        'total' => $product->getPrice() * $quantity
-                    ];
-                }
-            }
+        $items = [];
+        foreach ($cartItems as $cartItem) {
+            $product = $cartItem->getProduct();
+            $items[] = [
+                'product'  => $product,
+                'quantity' => $cartItem->getQuantity(),
+                'total'    => $product->getPrice() * $cartItem->getQuantity(),
+                'date'     => $product->getOrderDate(),
+            ];
         }
 
         return $items;
@@ -128,9 +114,6 @@ class OrderService
             $this->cartService->clear();
         } else {
             $this->session->remove(self::CART_KEY);
-
-            $sessionOrder = $this->session->get(self::ORDER_KEY, []);
-
         }
 
         return $order;
