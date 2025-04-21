@@ -18,7 +18,7 @@ class OrderItem
 
     #[Assert\Type(Order::class)]
     #[ORM\ManyToOne(targetEntity: Order::class)]
-    #[ORM\JoinColumn(name: "order_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
+    #[ORM\JoinColumn(name: "order_id", referencedColumnName: "id", onDelete: "RESTRICT", nullable: false)]
     private ?Order $order = null;
 
     #[Assert\Type(Product::class)]

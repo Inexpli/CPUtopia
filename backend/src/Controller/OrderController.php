@@ -2,22 +2,41 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
-use App\Entity\OrderItem;
-use App\Repository\OrderRepository;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
+use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class OrderController extends AbstractController
 {
-    #[Route('api/order', name: 'api_order_index', methods: ['GET'])]
-    public function index(OrderRepository $repository): Response
+    #[Route('/api/order/', name: 'api_order_create', methods: ['GET'])]
+    public function index(OrderService $orderService): JsonResponse
     {
-        return $this->json($repository->findAll(), Response::HTTP_OK);
+        $order = $orderService->index();
+
+        return $this->json($order, JsonResponse::HTTP_OK);
     }
+
+    #[Route('/api/order/create', name: 'api_order_create', methods: ['POST'])]
+    public function create(OrderService $orderService): JsonResponse
+    {
+        $order = $orderService->add();
+
+        return $this->json($order, JsonResponse::HTTP_OK);
+    }
+
+    // #[Route('/api/order/update', name: 'api_order_update', methods: ['PUT', 'PATCH'])]
+    // public function update(Request $request, OrderService $orderService): JsonResponse {
+
+    //     $data = json_decode($request->getContent(), true);
+        
+    //     if (!$data) {
+    //         return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
+    //     }
+
+    //     $order = $orderService->update();
+
+    //     return $this->json($order, JsonResponse::HTTP_OK);
+    // }
 }
