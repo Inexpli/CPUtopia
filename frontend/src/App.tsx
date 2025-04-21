@@ -1,13 +1,19 @@
 import "./App.css";
-import { Navbar } from "@/components/Navbar.tsx";
-import { MainCarousel } from "@/components/Carousel.tsx";
+import { RegisterPage } from "@/components/Pages/RegisterPage.tsx";
+import { Route, Routes } from "react-router-dom";
+import { LoginPage } from "@/components/Pages/LoginPage.tsx";
+import { HomePage } from "@/components/Pages/HomePage.tsx";
 
 function App() {
   return (
-    <div className="bg-neutral-800 text-200 w-screen h-screen font-sans">
-      <Navbar />
-      <MainCarousel />
-    </div>
+    <Routes>
+      {/* Strona główna */}
+      <Route path="/" element={<HomePage />} />
+      {/* Strona logowania */}
+      <Route path="/logowanie" element={<LoginPage />} />
+      {/* Strona rejestracji */}
+      <Route path="/rejestracja" element={<RegisterPage />} />
+    </Routes>
   );
 }
 
