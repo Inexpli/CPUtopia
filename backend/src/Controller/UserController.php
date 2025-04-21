@@ -119,7 +119,7 @@ class UserController extends AbstractController
             return $this->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        return $this->json(['message' => 'Login successful', 'user' => $user->getUserIdentifier()]);
+        return $this->json(['message' => 'Login successful', 'user' => $user->getUserIdentifier()], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/user/promote/{id}', name: 'promote', methods: ['PATCH'])]

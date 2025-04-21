@@ -123,7 +123,7 @@ final class ProductController extends AbstractController
         $manager->remove($product);
         $manager->flush();
         
-        return $this->json(['message' => 'Product deleted successfully']);
+        return $this->json(['message' => 'Product deleted successfully'], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/product/{id}', name: 'api_product_show', methods: ['GET'])]
