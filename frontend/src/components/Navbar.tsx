@@ -13,7 +13,7 @@ export const Navbar = () => {
     "text-sm font-medium text-neutral-700 dark:text-neutral-300 transition-colors";
 
   return (
-    <nav className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 relative">
+    <nav className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 relative z-10">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4 relative">
         {/* Left - Logo */}
         <a href="/" className="flex items-center space-x-3 z-10">
