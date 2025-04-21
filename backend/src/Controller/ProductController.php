@@ -8,7 +8,7 @@ use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -16,9 +16,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ProductController extends AbstractController
 {
     #[Route('api/product', name: 'products', methods: ['GET'])]
-    public function index(ProductRepository $repository): Response
+    public function index(ProductRepository $repository): JsonResponse
     {
-        return $this->json($repository->findAll(), Response::HTTP_OK);
+        return $this->json($repository->findAll(), JsonResponse::HTTP_OK);
     }
 
 
@@ -29,12 +29,12 @@ final class ProductController extends AbstractController
         EntityManagerInterface $manager,
         ValidatorInterface $validator,
         CategoryRepository $categoryRepository
-    ): Response 
+    ): JsonResponse 
     {
         $data = json_decode($request->getContent(), true);
 
         if (!$data) {
-            return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $product = new Product();
@@ -53,13 +53,13 @@ final class ProductController extends AbstractController
 
         $errors = $validator->validate($product);
         if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
+            return $this->json(['errors' => (string) $errors], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $manager->persist($product);
         $manager->flush();
 
-        return $this->json(['message' => 'Product added successfully'], Response::HTTP_CREATED);
+        return $this->json(['message' => 'Product added successfully'], JsonResponse::HTTP_CREATED);
     }
 
     #[Route('api/product/{id}', name: 'api_product_edit', methods: ['PUT', 'PATCH'])]
@@ -71,17 +71,17 @@ final class ProductController extends AbstractController
         EntityManagerInterface $manager,
         ValidatorInterface $validator,
         CategoryRepository $categoryRepository
-    ): Response 
+    ): JsonResponse 
     {
         $product = $repository->find($id);
 
         if (!$product) {
-            return $this->json(['error' => 'Product not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Product not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data = json_decode($request->getContent(), true);
         if (!$data) {
-            return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $product->setName($data['name']);
@@ -98,12 +98,12 @@ final class ProductController extends AbstractController
 
         $errors = $validator->validate($product);
         if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
+            return $this->json(['errors' => (string) $errors], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $manager->flush();
 
-        return $this->json(['message' => 'Product updated successfully'], Response::HTTP_OK);
+        return $this->json(['message' => 'Product updated successfully'], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/product/{id}', name: 'api_product_delete', methods: ['DELETE'])]
@@ -112,12 +112,12 @@ final class ProductController extends AbstractController
         int $id,
         ProductRepository $repository,
         EntityManagerInterface $manager
-    ): Response 
+    ): JsonResponse 
     {
         $product = $repository->find($id);
         
         if (!$product) {
-            return $this->json(['error' => 'Product not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Product not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         
         $manager->remove($product);
@@ -127,14 +127,14 @@ final class ProductController extends AbstractController
     }
 
     #[Route('api/product/{id}', name: 'api_product_show', methods: ['GET'])]
-    public function show(int $id, ProductRepository $repository): Response
+    public function show(int $id, ProductRepository $repository): JsonResponse
     {
         $product = $repository->find($id);
 
         if (!$product) {
-            return $this->json(['error' => 'Product not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Product not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        return $this->json($product, Response::HTTP_OK);
+        return $this->json($product, JsonResponse::HTTP_OK);
     }
 }

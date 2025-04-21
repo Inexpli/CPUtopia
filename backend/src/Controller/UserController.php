@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,13 +17,13 @@ class UserController extends AbstractController
 {
     // Na potrzebe DEV'u
     #[Route('/api/user/me', name: 'api_me', methods: ['GET'])]
-    public function me(): Response
+    public function me(): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) {
             return $this->json(
                 ['error' => 'Unauthorized'],
-                Response::HTTP_UNAUTHORIZED
+                JsonResponse::HTTP_UNAUTHORIZED
             );
         }
 
@@ -31,12 +31,12 @@ class UserController extends AbstractController
             'id'    => $user->getId(),
             'email' => $user->getEmail(),
             'roles' => $user->getRoles(),
-        ], Response::HTTP_OK);
+        ], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/user/users/', name: 'users', methods: ['GET'])]
     public function index(UserRepository $repository) {
-        return $this->json($repository->findAll(), Response::HTTP_OK);
+        return $this->json($repository->findAll(), JsonResponse::HTTP_OK);
     }
 
     #[Route('api/user/register', name: 'register', methods: ['POST'])]
@@ -45,12 +45,12 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator
-    ): Response {
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if (!$data || !isset($data['password']) || !isset($data['email'])) {
             return $this->json(
                 ['status' => 'error', 'message' => 'Invalid JSON format'],
-                Response::HTTP_BAD_REQUEST
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
         
@@ -68,7 +68,7 @@ class UserController extends AbstractController
             }
             return $this->json(
                 ['status' => 'error', 'message' => implode(', ', $errorMessages)],
-                Response::HTTP_BAD_REQUEST
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
@@ -84,7 +84,7 @@ class UserController extends AbstractController
             }
             return $this->json(
                 ['status' => 'error', 'message' => implode(', ', $errorMessages)],
-                Response::HTTP_BAD_REQUEST
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
@@ -93,7 +93,7 @@ class UserController extends AbstractController
 
         return $this->json(
             ['status' => 'success', 'message' => 'User has been registered successfuly'],
-            Response::HTTP_CREATED
+            JsonResponse::HTTP_CREATED
         );
     }
 
@@ -102,20 +102,20 @@ class UserController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher
-    ): Response 
+    ): JsonResponse 
     {
         $data = json_decode($request->getContent(), true);
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
 
         if (!$email || !$password) {
-            return $this->json(['message' => 'Email and password are required.'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['message' => 'Email and password are required.'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
-            return $this->json(['message' => 'Invalid credentials.'], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         return $this->json(['message' => 'Login successful', 'user' => $user->getUserIdentifier()]);
@@ -123,17 +123,17 @@ class UserController extends AbstractController
 
     #[Route('api/user/promote/{id}', name: 'promote', methods: ['PATCH'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function promote(int $id, UserRepository $repository, EntityManagerInterface $manager): Response 
+    public function promote(int $id, UserRepository $repository, EntityManagerInterface $manager): JsonResponse 
     {
         $user = $repository->find($id);
 
         if(!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $user->setRoles(['ROLE_ADMIN']);
         $manager->flush();
 
-        return $this->json(['message' => 'User promoted successfully'], Response::HTTP_OK);
+        return $this->json(['message' => 'User promoted successfully'], JsonResponse::HTTP_OK);
     }
 }

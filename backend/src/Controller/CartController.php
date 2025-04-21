@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends AbstractController
 {
@@ -19,13 +18,13 @@ class CartController extends AbstractController
         
         $cartService->add($id, $quantity);
 
-        return $this->json(['message' => 'Product added to cart']);
+        return $this->json(['message' => 'Product added to cart'], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/cart', name: 'api_cart_view', methods: ['GET'])]
     public function view(CartService $cartService): JsonResponse
     {
-        $items = $cartService->getCart();
+        $items = $cartService->index();
         return $this->json($items, context: ['groups' => ['cart']]);
     }
 
@@ -36,12 +35,12 @@ class CartController extends AbstractController
         if (!$result) {
             return $this->json(
                 ['error' => 'Product not found in cart'],
-                Response::HTTP_NOT_FOUND
+                JsonResponse::HTTP_NOT_FOUND
             );
         }
         return $this->json(
             ['message' => 'Product removed from cart'],
-            Response::HTTP_OK
+            JsonResponse::HTTP_OK
         );
     }
 

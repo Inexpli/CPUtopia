@@ -7,7 +7,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -15,9 +15,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class CategoryController extends AbstractController
 {
     #[Route('api/category', name: 'api_category_index', methods: ['GET'])]
-    public function index(CategoryRepository $repository): Response
+    public function index(CategoryRepository $repository): JsonResponse
     {
-        return $this->json($repository->findAll(), Response::HTTP_OK);
+        return $this->json($repository->findAll(), JsonResponse::HTTP_OK);
     }
 
     #[Route('api/category/add', name: 'api_category_add', methods: ['POST'])]
@@ -26,12 +26,12 @@ final class CategoryController extends AbstractController
         Request $request,
         EntityManagerInterface $manager,
         ValidatorInterface $validator
-    ) : Response 
+    ) : JsonResponse 
     {
         $data = json_decode($request->getContent(), true);
 
         if (!$data) {
-            return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $category = new Category();
@@ -40,13 +40,13 @@ final class CategoryController extends AbstractController
 
         $errors = $validator->validate($category);
         if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
+            return $this->json(['errors' => (string) $errors], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $manager->persist($category);
         $manager->flush();
 
-        return $this->json(['message' => 'Category added successfully'], Response::HTTP_CREATED);
+        return $this->json(['message' => 'Category added successfully'], JsonResponse::HTTP_CREATED);
     }
 
     #[Route('api/category/{id}', name: 'api_category_edit', methods: ['PUT', 'PATCH'])]
@@ -57,28 +57,28 @@ final class CategoryController extends AbstractController
         CategoryRepository $repository,
         EntityManagerInterface $manager,
         ValidatorInterface $validator
-    ) : Response 
+    ) : JsonResponse 
     {
         $category = $repository->find($id);
         if(!$category) {
-            return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Category not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data = json_decode($request->getContent(), true);
         if (!$data) {
-            return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         if(isset($data['name'])) $category->setName($data['name']);
 
         $errors = $validator->validate($category);
         if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
+            return $this->json(['errors' => (string) $errors], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $manager->flush();
 
-        return $this->json(['message' => 'Category updated successfully'], Response::HTTP_OK);
+        return $this->json(['message' => 'Category updated successfully'], JsonResponse::HTTP_OK);
     }
 
     #[Route('api/category/{id}', name: 'api_category_delete', methods: ['DELETE'])]
@@ -87,17 +87,17 @@ final class CategoryController extends AbstractController
         int $id,
         CategoryRepository $repository,
         EntityManagerInterface $manager
-    ): Response 
+    ): JsonResponse 
     {
         $category = $repository->find($id);
         
         if (!$category) {
-            return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Category not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         
         $manager->remove($category);
         $manager->flush();
         
-        return $this->json(['message' => 'Category deleted successfully'], Response::HTTP_OK);
+        return $this->json(['message' => 'Category deleted successfully'], JsonResponse::HTTP_OK);
     }
 }
