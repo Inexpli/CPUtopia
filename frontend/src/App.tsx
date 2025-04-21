@@ -1,10 +1,12 @@
-import './App.css'
-import {Navbar} from "@/components/Navbar.tsx";
+import "./App.css";
+import { Navbar } from "@/components/Navbar.tsx";
 
 function App() {
-  return <div className="bg-neutral-800 text-200 w-screen h-screen">
-    <Navbar/>
-  </div>
+  return (
+    <div className="bg-neutral-800 text-200 w-screen h-screen font-sans">
+      <Navbar />
+    </div>
+  );
 }
 
-export default App
+export default App;
