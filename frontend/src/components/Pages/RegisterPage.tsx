@@ -1,90 +1,71 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {Navbar} from "@/components/Navbar.tsx";
 
 export const RegisterPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Sprawdzanie, czy hasła się zgadzają
-    if (password !== confirmPassword) {
-      alert("Hasła się nie zgadzają");
-      return;
-    }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            alert("Hasła się nie zgadzają");
+            return;
+        }
 
-    // Tutaj możesz dodać logikę rejestracji, np. wysłać zapytanie do API
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+        try {
+            const response = await fetch("http://localhost:8080/api/user/register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email, password}),
+            });
 
-  return (
-    <div className="w-full max-w-sm mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Rejestracja</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-neutral-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded-md mt-1"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-neutral-700"
-          >
-            Hasło
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md mt-1"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="confirm-password"
-            className="block text-sm font-medium text-neutral-700"
-          >
-            Potwierdź Hasło
-          </label>
-          <input
-            type="password"
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border rounded-md mt-1"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-600 text-white rounded-md mt-4 hover:bg-blue-700 transition-colors"
-        >
-          Zarejestruj się
-        </button>
-      </form>
-      <div className="mt-4 text-center">
-        <p className="text-sm">
-          Masz już konto?{" "}
-          <a href="/logowanie" className="text-blue-600 hover:underline">
-            Zaloguj się
-          </a>
-        </p>
-      </div>
-    </div>
-  );
+            if (response.ok) {
+                alert("Rejestracja udana!");
+                navigate("/logowanie");
+            } else {
+                const errorData = await response.json();
+                alert("Błąd: " + errorData.message || "Nie udało się zarejestrować.");
+            }
+        } catch (error) {
+            console.error("Błąd rejestracji:", error);
+            alert("Wystąpił błąd sieci.");
+        }
+    };
+
+    return (<>
+            <Navbar/>
+
+            <div className="w-full max-w-sm mx-auto p-4">
+                <h2 className="text-2xl font-semibold mb-6 text-center">Rejestracja</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input type="email" id="email" value={email}
+                               onChange={(e) => setEmail(e.target.value)}
+                               className="w-full p-2 border rounded-md mt-1" required/>
+                    </div>
+                    <div>
+                        <label htmlFor="password">Hasło</label>
+                        <input type="password" id="password" value={password}
+                               onChange={(e) => setPassword(e.target.value)}
+                               className="w-full p-2 border rounded-md mt-1" required/>
+                    </div>
+                    <div>
+                        <label htmlFor="confirm-password">Potwierdź Hasło</label>
+                        <input type="password" id="confirm-password" value={confirmPassword}
+                               onChange={(e) => setConfirmPassword(e.target.value)}
+                               className="w-full p-2 border rounded-md mt-1" required/>
+                    </div>
+                    <button type="submit"
+                            className="w-full p-2 bg-blue-600 text-white rounded-md mt-4 hover:bg-blue-700">Zarejestruj
+                        się
+                    </button>
+                </form>
+            </div>
+        </>
+
+    );
 };
