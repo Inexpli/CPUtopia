@@ -23,7 +23,6 @@ class Product
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Category $category = null;
 
-
     #[Groups(['cart'])]
     #[Assert\Type('string')]
     #[Assert\NotBlank]
@@ -46,6 +45,10 @@ class Product
     #[Assert\GreaterThanOrEqual(0)]
     #[ORM\Column(nullable: true)]
     private ?int $stock = null;
+
+    #[ORM\Column(length: 150, unique: true)]
+    #[Gedmo\Slug(fields: ['name'])]
+    private ?string $slug = null;
 
     #[Gedmo\Timestampable(on:"create")]
     #[ORM\Column]
@@ -116,6 +119,18 @@ class Product
     public function setStock(?int $stock): static
     {
         $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
