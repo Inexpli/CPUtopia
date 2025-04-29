@@ -34,7 +34,8 @@ export const RegisterPage = () => {
         }
     };
 
-    return (<>
+    return (
+        <>
             <Navbar/>
 
             <div className="w-full max-w-sm mx-auto p-4">
@@ -42,29 +43,45 @@ export const RegisterPage = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" value={email}
-                               onChange={(e) => setEmail(e.target.value)}
-                               className="w-full p-2 border rounded-md mt-1" required/>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-2 border rounded-md mt-1"
+                            required
+                        />
                     </div>
                     <div>
                         <label htmlFor="password">Hasło</label>
-                        <input type="password" id="password" value={password}
-                               onChange={(e) => setPassword(e.target.value)}
-                               className="w-full p-2 border rounded-md mt-1" required/>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-2 border rounded-md mt-1"
+                            required
+                        />
                     </div>
                     <div>
                         <label htmlFor="confirm-password">Potwierdź Hasło</label>
-                        <input type="password" id="confirm-password" value={confirmPassword}
-                               onChange={(e) => setConfirmPassword(e.target.value)}
-                               className="w-full p-2 border rounded-md mt-1" required/>
+                        <input
+                            type="password"
+                            id="confirm-password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full p-2 border rounded-md mt-1"
+                            required
+                        />
                     </div>
-                    <button type="submit"
-                            className="w-full p-2 bg-blue-600 text-white rounded-md mt-4 hover:bg-blue-700">Zarejestruj
-                        się
+                    <button
+                        type="submit"
+                        className="w-full p-2 bg-blue-600 text-white rounded-md mt-4 hover:bg-blue-700"
+                    >
+                        Zarejestruj się
                     </button>
                 </form>
             </div>
         </>
-
     );
 };

@@ -1,4 +1,4 @@
-import {Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X,} from "lucide-react";
+import {Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X} from "lucide-react";
 import {useEffect, useState} from "react";
 import {MainLogo} from "@/components/MainLogo";
 import clsx from "clsx";
@@ -6,6 +6,7 @@ import clsx from "clsx";
 export const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
+    const [accountMenuOpen, setAccountMenuOpen] = useState(false); // Stan do obsługi rozwijanego menu
 
     useEffect(() => {
         document.documentElement.classList.toggle("dark", darkMode);
@@ -37,9 +38,37 @@ export const Navbar = () => {
                 <div className="flex items-center gap-4 text-neutral-800 dark:text-neutral-200">
                     <div
                         className="hidden md:flex items-center *:hover:bg-neutral-200 dark:*:hover:bg-neutral-700 *:rounded *:p-2">
-                        <a href="/konto" title="Moje konto">
-                            <User className="h-5 text-green-500"/>
-                        </a>
+                        {/* Moje konto z rozwijanym menu */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setAccountMenuOpen(!accountMenuOpen)} // Zmiana stanu rozwijanego menu
+                                className="flex items-center gap-2"
+                            >
+                                <User className="h-5 text-green-500"/>
+                                Moje konto
+                            </button>
+
+                            {accountMenuOpen && (
+                                <div
+                                    className="absolute left-0 mt-2 bg-white dark:bg-neutral-900 shadow-md rounded-lg w-48">
+                                    <a
+                                        href="/logowanie"
+                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                        onClick={() => setAccountMenuOpen(false)}
+                                    >
+                                        Logowanie
+                                    </a>
+                                    <a
+                                        href="/rejestracja"
+                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                        onClick={() => setAccountMenuOpen(false)}
+                                    >
+                                        Rejestracja
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+
                         <a href="/pomoc" title="Pomoc">
                             <Headphones className="h-5 text-green-500"/>
                         </a>
@@ -119,10 +148,35 @@ export const Navbar = () => {
 
                     {/* Menu items */}
                     <nav className="mt-6 flex flex-col gap-4 text-sm">
-                        <a href="/konto" className="flex items-center gap-2 hover:text-blue-600"
-                           onClick={() => setMobileOpen(false)}>
-                            <User size={16}/> Moje konto
-                        </a>
+                        <div className="relative">
+                            <button
+                                onClick={() => setAccountMenuOpen(!accountMenuOpen)} // Zmiana stanu rozwijanego menu
+                                className="flex items-center gap-2"
+                            >
+                                <User size={16}/> Moje konto
+                            </button>
+
+                            {accountMenuOpen && (
+                                <div
+                                    className="absolute left-0 mt-2 bg-white dark:bg-neutral-900 shadow-md rounded-lg w-48">
+                                    <a
+                                        href="/logowanie"
+                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                        onClick={() => setAccountMenuOpen(false)}
+                                    >
+                                        Logowanie
+                                    </a>
+                                    <a
+                                        href="/rejestracja"
+                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                        onClick={() => setAccountMenuOpen(false)}
+                                    >
+                                        Rejestracja
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+
                         <a href="/pomoc" className="flex items-center gap-2 hover:text-blue-600"
                            onClick={() => setMobileOpen(false)}>
                             <Headphones size={16}/> Pomoc
