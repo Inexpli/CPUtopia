@@ -1,9 +1,9 @@
 import "./App.css";
-import {RegisterPage} from "@/Pages/RegisterPage.tsx";
+import {RegisterPage} from "@/pages/RegisterPage.tsx";
 import {Route, Routes} from "react-router-dom";
-import {LoginPage} from "@/Pages/LoginPage.tsx";
-import {HomePage} from "@/Pages/HomePage.tsx";
-import {CartPage} from "@/Pages/CartPage.tsx";
+import {LoginPage} from "@/pages/LoginPage.tsx";
+import {HomePage} from "@/pages/HomePage.tsx";
+import {CartPage} from "@/pages/CartPage.tsx";
 
 function App() {
     return (<div className="font-sans">
