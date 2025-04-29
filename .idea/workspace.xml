@@ -5,12 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9274e3d4-f775-4557-acb9-a744cb09e705" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MainLogo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MainLogo.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dockerfile" />
+      </list>
+    </option>
   </component>
   <component name="FormatOnSaveOptions">
     <option name="myRunOnSave" value="true" />
@@ -55,20 +64,29 @@
     "javascript.nodejs.core.library.typings.version": "22.6.2",
     "last_opened_file_path": "//wsl.localhost/Ubuntu/home/barto/workspace/CPUtopia",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.detected.package.stylelint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "node.js.selected.package.stylelint": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "wsl://Ubuntu@/home/barto/.asdf/shims/node",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "\\\\wsl.localhost\\Ubuntu\\home\\barto\\workspace\\CPUtopia\\frontend\\node_modules\\prettier",
     "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "actions.on.save",
+    "settings.editor.selected.configurable": "Settings.JavaScript.Linters.JSHint",
     "ts.external.directory.path": "\\\\wsl.localhost\\Ubuntu\\home\\barto\\workspace\\CPUtopia\\frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="\\wsl.localhost\Ubuntu\home\barto\workspace\CPUtopia\frontend\public" />
+      <recent name="\\wsl.localhost\Ubuntu\home\barto\workspace\CPUtopia\frontend\src" />
+      <recent name="\\wsl.localhost\Ubuntu\home\barto\workspace\CPUtopia\frontend\src\components\Pages" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -89,7 +107,11 @@
       <workItem from="1745079953093" duration="108000" />
       <workItem from="1745080129038" duration="81000" />
       <workItem from="1745080246321" duration="5343000" />
-      <workItem from="1745271647710" duration="6097000" />
+      <workItem from="1745271647710" duration="7285000" />
+      <workItem from="1745316822671" duration="10266000" />
+      <workItem from="1745421177528" duration="2086000" />
+      <workItem from="1745424191491" duration="941000" />
+      <workItem from="1745944852026" duration="3176000" />
     </task>
     <servers />
   </component>
