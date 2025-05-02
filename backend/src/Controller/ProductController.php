@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class ProductController extends AbstractController
 {
@@ -28,32 +30,38 @@ final class ProductController extends AbstractController
         Request $request,
         EntityManagerInterface $manager,
         ValidatorInterface $validator,
-        CategoryRepository $categoryRepository
-    ): JsonResponse 
-    {
-        $data = json_decode($request->getContent(), true);
+        CategoryRepository $categoryRepository,
+        #[Autowire('%product_images_directory%')] string $imagesDir
+    ): JsonResponse {
+        $name        = $request->request->get('name');
+        $description = $request->request->get('description');
+        $price       = $request->request->get('price');
+        $stock       = $request->request->get('stock');
+        $categoryId  = $request->request->get('category_id');
 
-        if (!$data) {
-            return $this->json(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
-        }
+        /** @var UploadedFile|null $file */
+        $file = $request->files->get('image');
 
         $product = new Product();
+        $product->setName($name);
+        $product->setDescription($description);
+        $product->setPrice((float)$price);
+        $product->setStock((int)$stock);
 
-        $product->setName($data['name']);
-        $product->setDescription($data['description']);
-        $product->setPrice($data['price']);
-        $product->setStock($data['stock']);
+        if ($categoryId) {
+            $cat = $categoryRepository->find($categoryId);
+            $product->setCategory($cat);
+        }
 
-        if (!empty($data['category_id'])) {
-            $category = $categoryRepository->find($data['category_id']);
-            if ($category) {
-                $product->setCategory($category);
-            }
+        if ($file instanceof UploadedFile) {
+            $filename = uniqid().'.'.$file->guessExtension();
+            $file->move($imagesDir, $filename);
+            $product->setImage($filename);
         }
 
         $errors = $validator->validate($product);
         if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], JsonResponse::HTTP_BAD_REQUEST);
+            return $this->json(['errors' => (string)$errors], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $manager->persist($product);

@@ -58,6 +58,10 @@ class Product
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['cart'])]
+    private ?string $image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -156,6 +160,17 @@ class Product
     {
         $this->updated_at = $updated_at;
 
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
         return $this;
     }
 }
