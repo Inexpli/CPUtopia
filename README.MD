@@ -189,7 +189,7 @@ Operacje modyfikacji (`add`, `edit`, `delete`) wymagają roli **ADMIN**.
     "description": "Opis",
     "price": "1550.60",
     "stock": 10,
-    "category_id": 1
+    "category_id": 1,
     "image": file
   }
   ```
