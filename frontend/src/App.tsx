@@ -1,9 +1,9 @@
 import "./App.css";
-import {RegisterPage} from "@/pages/RegisterPage.tsx";
-import {Route, Routes} from "react-router-dom";
-import {LoginPage} from "@/pages/LoginPage.tsx";
-import {HomePage} from "@/pages/HomePage.tsx";
-import {CartPage} from "@/pages/CartPage.tsx";
+import { RegisterPage } from "@/pages/RegisterPage.tsx";
+import { Route, Routes } from "react-router-dom";
+import { LoginPage } from "@/pages/LoginPage.tsx";
+import { HomePage } from "@/pages/HomePage.tsx";
+import { CartPage } from "@/pages/CartPage.tsx";
 
 function App() {
     return (<div className="font-sans">
@@ -12,6 +12,9 @@ function App() {
                 <Route path="/logowanie" element={<LoginPage/>}/>
                 <Route path="/rejestracja" element={<RegisterPage/>}/>
                 <Route path="/koszyk" element={<CartPage/>}/>
+   
+            
+   
                 {/*
             <Route path="/zamowienia" element={<OrdersPage/>}/>
             <Route path="/produkty" element={<ProductsPage/>}/>

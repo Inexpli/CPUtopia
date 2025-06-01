@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {Navbar} from "@/components/Navbar.tsx";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "@/components/Navbar.tsx";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -14,7 +14,6 @@ export const LoginPage = () => {
             const response = await fetch("http://localhost:8080/api/user/login", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                credentials: "include",
                 body: JSON.stringify({email, password}),
             });
 

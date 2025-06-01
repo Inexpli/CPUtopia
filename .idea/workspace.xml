@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9274e3d4-f775-4557-acb9-a744cb09e705" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/CartPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/CartPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/HomePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/LoginPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/LoginPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/RegisterPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +16,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Dockerfile" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -60,6 +55,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Node.js.test.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "code.cleanup.on.save": "true",
     "git-widget-placeholder": "front2",
@@ -117,6 +113,8 @@
       <workItem from="1745424191491" duration="941000" />
       <workItem from="1745944852026" duration="3176000" />
       <workItem from="1745948080358" duration="2347000" />
+      <workItem from="1746641640492" duration="411000" />
+      <workItem from="1746722846576" duration="769000" />
     </task>
     <servers />
   </component>
