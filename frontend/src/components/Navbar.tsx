@@ -1,16 +1,13 @@
-import {Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X} from "lucide-react";
-import {useEffect, useState} from "react";
-import {MainLogo} from "@/components/MainLogo";
+import { Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X } from "lucide-react";
+import { useState } from "react";
+import { MainLogo } from "@/components/MainLogo";
 import clsx from "clsx";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 export const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
-    const [accountMenuOpen, setAccountMenuOpen] = useState(false); // Stan do obsługi rozwijanego menu
-
-    useEffect(() => {
-        document.documentElement.classList.toggle("dark", darkMode);
-    }, [darkMode]);
+    const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+    const {enabled: darkMode, setEnabled: setDarkMode} = useDarkMode();
 
     return (
         <nav className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 z-10 relative">
@@ -41,7 +38,7 @@ export const Navbar = () => {
                         {/* Moje konto z rozwijanym menu */}
                         <div className="relative">
                             <button
-                                onClick={() => setAccountMenuOpen(!accountMenuOpen)} // Zmiana stanu rozwijanego menu
+                                onClick={() => setAccountMenuOpen(!accountMenuOpen)}
                                 className="flex items-center gap-2"
                             >
                                 <User className="h-5 text-green-500"/>
@@ -150,7 +147,7 @@ export const Navbar = () => {
                     <nav className="mt-6 flex flex-col gap-4 text-sm">
                         <div className="relative">
                             <button
-                                onClick={() => setAccountMenuOpen(!accountMenuOpen)} // Zmiana stanu rozwijanego menu
+                                onClick={() => setAccountMenuOpen(!accountMenuOpen)}
                                 className="flex items-center gap-2"
                             >
                                 <User size={16}/> Moje konto
