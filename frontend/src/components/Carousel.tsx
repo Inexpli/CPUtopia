@@ -34,12 +34,10 @@ export const MainCarousel = () => {
         infinite
         autoPlay
         autoPlaySpeed={5000}
-        arrows={true}
-        showDots={true}
+        arrows={false}
         className="w-full"
         containerClass="w-full"
         itemClass="relative"
-        dotListClass="custom-dot-list-style"
       >
         {carouselItems.map((item, index) => (
           <div key={index} className="relative w-full h-[500px]">
@@ -48,7 +46,7 @@ export const MainCarousel = () => {
               className="w-full h-full object-cover"
               alt={item.title}
             />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white">
+            <div className="absolute inset-0 bg-black/80 flex flex-col justify-center items-center text-white">
               <h2 className="text-4xl font-bold mb-4">{item.title}</h2>
               <p className="text-xl">{item.description}</p>
               <button className="mt-6 px-8 py-3 bg-blue-600 hover:bg-blue-700 transition-colors rounded-lg text-white font-semibold">

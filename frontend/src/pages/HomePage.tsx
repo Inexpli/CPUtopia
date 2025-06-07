@@ -108,7 +108,7 @@ export const HomePage = () => {
                             <input
                                 type="email"
                                 placeholder="Twój adres email"
-                                className="flex-1 px-4 py-2 rounded-lg text-gray-900"
+                                className="flex-1 px-4 py-2 rounded-lg text-gray-900 bg-neutral-200"
                             />
                             <button className="px-6 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
                                 Zapisz się
