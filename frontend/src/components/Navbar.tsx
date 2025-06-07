@@ -4,34 +4,30 @@ import { MainLogo } from "@/components/MainLogo";
 import clsx from "clsx";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { useUser } from "@/contexts/UserContext";
-import axios from "axios";
-import { API_ENDPOINTS } from "@/config/api";
+import { useLogout } from "@/hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
     const {enabled: darkMode, setEnabled: setDarkMode} = useDarkMode();
-    const { user, isLoggedIn, setUser } = useUser();
+    const { user, isLoggedIn } = useUser();
+    const logout = useLogout();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
-        try {
-            await axios.post(API_ENDPOINTS.auth.logout, {}, { withCredentials: true });
-        } catch (error) {
-            console.error('Błąd podczas wylogowywania:', error);
-        }
-        setUser(null);
-        setAccountMenuOpen(false);
+            await logout();
+            setAccountMenuOpen(false);
+            window.location.reload();
+            navigate("/");
     };
 
-    console.log(user);
     return (
         <nav className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 z-10 relative">
             <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
                 {/* Left: Logo */}
                 <div className="flex items-center">
-                    <a href="/">
-                        <MainLogo/>
-                    </a>
+                    <MainLogo/>
                 </div>
 
                 {/* Center: Searchbar (desktop only) */}
@@ -84,7 +80,7 @@ export const Navbar = () => {
                                             </a>
                                             <button
                                                 onClick={handleLogout}
-                                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer hover:rounded-b-lg"
                                             >
                                                 <LogOut className="h-4 w-4" />
                                                 Wyloguj się
@@ -214,10 +210,7 @@ export const Navbar = () => {
                                         Zamówienia
                                     </a>
                                     <button
-                                        onClick={() => {
-                                            handleLogout();
-                                            setMobileOpen(false);
-                                        }}
+                                        onClick={handleLogout}
                                         className="flex items-center gap-2 text-red-600 py-2"
                                     >
                                         <LogOut size={16}/>

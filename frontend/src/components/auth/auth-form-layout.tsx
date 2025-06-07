@@ -16,4 +16,4 @@ export const AuthFormLayout = ({ title, children }: AuthFormLayoutProps) => {
             </div>
         </>
     );
-}; 
+};

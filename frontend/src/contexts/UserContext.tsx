@@ -38,7 +38,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setIsLoading(false);
             }
         };
-
         checkAuthStatus();
     }, []);
 

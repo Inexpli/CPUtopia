@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { useUserProfile } from "../hooks/useUserProfile";
-import { toast } from "sonner";
 
 export const MyProfile = () => {
     const { data: user, isLoading, error } = useUserProfile();
@@ -17,7 +16,6 @@ export const MyProfile = () => {
     }
 
     if (error) {
-        toast.error(error.message);
         return (
             <>
                 <Navbar />

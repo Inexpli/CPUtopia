@@ -5,7 +5,6 @@ import { registerSchema, type RegisterFormData } from "../schemas/auth";
 import { useRegister } from "../hooks/useRegister";
 import { FormInput } from "@/components/ui/form-input";
 import { AuthFormLayout } from "@/components/auth/auth-form-layout";
-import { toast } from "sonner";
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
@@ -18,10 +17,9 @@ export const RegisterPage = () => {
     const onSubmit = async (data: RegisterFormData) => {
         try {
             await registerUser(data);
-            toast.success("Rejestracja udana!");
             navigate("/logowanie");
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Wystąpił nieznany błąd");
+            // Error handled in useRegister hook
         }
     };
 
@@ -43,9 +41,9 @@ export const RegisterPage = () => {
                     {...register("password")}
                 />
                 <FormInput
-                    label="Potwierdź Hasło"
+                    label="Powtórz hasło"
                     type="password"
-                    id="confirm-password"
+                    id="confirmPassword"
                     error={errors.confirmPassword?.message}
                     {...register("confirmPassword")}
                 />

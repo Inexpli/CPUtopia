@@ -6,7 +6,6 @@ import { useLogin } from "../hooks/useLogin";
 import { useUser } from "@/contexts/UserContext";
 import { FormInput } from "@/components/ui/form-input";
 import { AuthFormLayout } from "@/components/auth/auth-form-layout";
-import { toast } from "sonner";
 
 export const LoginPage = () => {
     const navigate = useNavigate();
@@ -18,18 +17,13 @@ export const LoginPage = () => {
     const { mutateAsync: login, isPending } = useLogin();
 
     const onSubmit = async (data: LoginFormData) => {
-        try {
             const response = await login(data);
             setUser({
                 id: response.id,
                 email: response.user,
                 name: response.user.split('@')[0]
             });
-            toast.success("Zalogowano pomyślnie!");
             navigate("/");
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Wystąpił nieznany błąd");
-        }
     };
 
     return (
