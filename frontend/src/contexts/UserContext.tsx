@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import axios from 'axios';
+import { API_ENDPOINTS } from '@/config/api';
 
 interface User {
     id: number;
@@ -10,18 +12,42 @@ interface UserContextType {
     user: User | null;
     setUser: (user: User | null) => void;
     isLoggedIn: boolean;
+    isLoading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                const response = await axios.get(API_ENDPOINTS.auth.profile, {
+                    withCredentials: true,
+                });
+                setUser({
+                    id: response.data.id,
+                    email: response.data.email,
+                    name: response.data.email.split('@')[0]
+                });
+            } catch {
+                setUser(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        checkAuthStatus();
+    }, []);
 
     return (
         <UserContext.Provider value={{
             user,
             setUser,
-            isLoggedIn: user !== null
+            isLoggedIn: user !== null,
+            isLoading
         }}>
             {children}
         </UserContext.Provider>

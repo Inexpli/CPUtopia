@@ -4,6 +4,8 @@ import { MainLogo } from "@/components/MainLogo";
 import clsx from "clsx";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { useUser } from "@/contexts/UserContext";
+import axios from "axios";
+import { API_ENDPOINTS } from "@/config/api";
 
 export const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,7 +13,12 @@ export const Navbar = () => {
     const {enabled: darkMode, setEnabled: setDarkMode} = useDarkMode();
     const { user, isLoggedIn, setUser } = useUser();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            await axios.post(API_ENDPOINTS.auth.logout, {}, { withCredentials: true });
+        } catch (error) {
+            console.error('Błąd podczas wylogowywania:', error);
+        }
         setUser(null);
         setAccountMenuOpen(false);
     };

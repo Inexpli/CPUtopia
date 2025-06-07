@@ -1,28 +1,28 @@
 import { useMutation } from '@tanstack/react-query';
 import type { RegisterFormData } from '../schemas/auth';
+import { API_ENDPOINTS } from '@/config/api';
+import axios, { AxiosError } from 'axios';
 
-const API_URL = 'http://localhost:8080';
+export interface RegisterResponse {
+    id: number;
+    email: string;
+}
 
 export const useRegister = () => {
-    return useMutation({
+    return useMutation<RegisterResponse, Error, RegisterFormData>({
         mutationFn: async (data: RegisterFormData) => {
-            const response = await fetch(`${API_URL}/api/user/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+            try {
+                const response = await axios.post(API_ENDPOINTS.auth.register, {
                     email: data.email,
                     password: data.password,
-                }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Wystąpił błąd podczas rejestracji');
+                });
+                return response.data;
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    throw new Error(error.response?.data?.message || 'Wystąpił błąd podczas rejestracji');
+                }
+                throw new Error('Wystąpił błąd podczas rejestracji');
             }
-
-            return response.json();
         },
     });
 }; 
