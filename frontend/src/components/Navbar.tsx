@@ -1,14 +1,22 @@
-import { Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X } from "lucide-react";
+import { Headphones, Heart, Menu, Moon, Search, ShoppingCart, Sun, User, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { MainLogo } from "@/components/MainLogo";
 import clsx from "clsx";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useUser } from "@/contexts/UserContext";
 
 export const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
     const {enabled: darkMode, setEnabled: setDarkMode} = useDarkMode();
+    const { user, isLoggedIn, setUser } = useUser();
 
+    const handleLogout = () => {
+        setUser(null);
+        setAccountMenuOpen(false);
+    };
+
+    console.log(user);
     return (
         <nav className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 z-10 relative">
             <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -42,26 +50,57 @@ export const Navbar = () => {
                                 className="flex items-center gap-2"
                             >
                                 <User className="h-5 text-green-500"/>
-                                Moje konto
+                                {isLoggedIn ? user?.name : "Moje konto"}
                             </button>
 
                             {accountMenuOpen && (
                                 <div
                                     className="absolute left-0 mt-2 bg-white dark:bg-neutral-900 shadow-md rounded-lg w-48">
-                                    <a
-                                        href="/logowanie"
-                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
-                                        onClick={() => setAccountMenuOpen(false)}
-                                    >
-                                        Logowanie
-                                    </a>
-                                    <a
-                                        href="/rejestracja"
-                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
-                                        onClick={() => setAccountMenuOpen(false)}
-                                    >
-                                        Rejestracja
-                                    </a>
+                                    {isLoggedIn ? (
+                                        <>
+                                            <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-200 dark:border-gray-700">
+                                                {user?.email}
+                                            </div>
+                                            <a
+                                                href="/profil"
+                                                className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                                onClick={() => setAccountMenuOpen(false)}
+                                            >
+                                                Mój profil
+                                            </a>
+                                            <a
+                                                href="/zamowienia"
+                                                className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                                onClick={() => setAccountMenuOpen(false)}
+                                            >
+                                                Zamówienia
+                                            </a>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                            >
+                                                <LogOut className="h-4 w-4" />
+                                                Wyloguj się
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <a
+                                                href="/logowanie"
+                                                className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                                onClick={() => setAccountMenuOpen(false)}
+                                            >
+                                                Logowanie
+                                            </a>
+                                            <a
+                                                href="/rejestracja"
+                                                className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
+                                                onClick={() => setAccountMenuOpen(false)}
+                                            >
+                                                Rejestracja
+                                            </a>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -146,31 +185,55 @@ export const Navbar = () => {
                     {/* Menu items */}
                     <nav className="mt-6 flex flex-col gap-4 text-sm">
                         <div className="relative">
-                            <button
-                                onClick={() => setAccountMenuOpen(!accountMenuOpen)}
-                                className="flex items-center gap-2"
-                            >
-                                <User size={16}/> Moje konto
-                            </button>
-
-                            {accountMenuOpen && (
-                                <div
-                                    className="absolute left-0 mt-2 bg-white dark:bg-neutral-900 shadow-md rounded-lg w-48">
+                            {isLoggedIn ? (
+                                <>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <User size={16}/>
+                                        <span className="font-medium">{user?.name}</span>
+                                    </div>
+                                    <div className="text-sm text-gray-500 mb-4">{user?.email}</div>
+                                    <a
+                                        href="/profil"
+                                        className="block py-2 hover:text-blue-600"
+                                        onClick={() => setMobileOpen(false)}
+                                    >
+                                        Mój profil
+                                    </a>
+                                    <a
+                                        href="/zamowienia"
+                                        className="block py-2 hover:text-blue-600"
+                                        onClick={() => setMobileOpen(false)}
+                                    >
+                                        Zamówienia
+                                    </a>
+                                    <button
+                                        onClick={() => {
+                                            handleLogout();
+                                            setMobileOpen(false);
+                                        }}
+                                        className="flex items-center gap-2 text-red-600 py-2"
+                                    >
+                                        <LogOut size={16}/>
+                                        Wyloguj się
+                                    </button>
+                                </>
+                            ) : (
+                                <>
                                     <a
                                         href="/logowanie"
-                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
-                                        onClick={() => setAccountMenuOpen(false)}
+                                        className="block py-2 hover:text-blue-600"
+                                        onClick={() => setMobileOpen(false)}
                                     >
                                         Logowanie
                                     </a>
                                     <a
                                         href="/rejestracja"
-                                        className="block px-4 py-2 text-black dark:text-neutral-200 hover:bg-blue-100"
-                                        onClick={() => setAccountMenuOpen(false)}
+                                        className="block py-2 hover:text-blue-600"
+                                        onClick={() => setMobileOpen(false)}
                                     >
                                         Rejestracja
                                     </a>
-                                </div>
+                                </>
                             )}
                         </div>
 

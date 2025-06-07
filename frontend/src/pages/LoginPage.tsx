@@ -4,9 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Navbar } from "@/components/Navbar.tsx";
 import { loginSchema, type LoginFormData } from "../schemas/auth";
 import { useLogin } from "../hooks/useLogin";
+import { useUser } from "@/contexts/UserContext";
 
 export const LoginPage = () => {
     const navigate = useNavigate();
+    const { setUser } = useUser();
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema)
     });
@@ -15,7 +17,14 @@ export const LoginPage = () => {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            await login(data);
+            const response = await login(data);
+            // Zakładamy, że serwer zwraca dane użytkownika w formacie {id, email, name}
+            setUser({
+                id: response.id,
+                email: response.user,
+                name: response.user || response?.user?.split('@')[0] // Jeśli name nie jest dostępne, użyj części adresu email
+            });
+            console.log(response);
             alert("Zalogowano pomyślnie!");
             navigate("/");
         } catch (error) {
