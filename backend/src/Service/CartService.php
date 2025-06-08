@@ -74,38 +74,35 @@ class CartService
     {
         $user = $this->security->getUser();
 
-
         if($user) {
             $item = $this->cartItemRepository->findOneBy([
                 'user'    => $user,
                 'product' => $productId,
             ]);
 
+            $product = $this->productRepository->find($productId);
+            if (!$product) {
+                throw new NotFoundHttpException("Product not found.");
+            }
+
             if (!$item) {
                 $item = new CartItem();
                 $item->setUser($user);
-
-                $product = $this->productRepository->find($productId);
-                if (!$product) {
-                    throw new NotFoundHttpException("Product not found.");
-                }
-
                 $item->setProduct($product);
                 $item->setQuantity($quantity);
-            } 
+            } else {
+                // Update existing item quantity
+                $item->setQuantity($quantity);
+            }
             
-            $item->setQuantity($item->getQuantity() + $quantity);
             $this->manager->persist($item);
             $this->manager->flush();
         }
         else {
             $cart = $this->session->get(self::CART_KEY, []);
             
-            if (isset($cart[$productId])) {
-                $cart[$productId] += $quantity;
-            } else {
-                $cart[$productId] = $quantity;
-            }
+            // For session cart, just set the new quantity directly
+            $cart[$productId] = $quantity;
     
             $this->session->set(self::CART_KEY, $cart);
         }
@@ -113,8 +110,9 @@ class CartService
 
     /**
      * @throws LogicException 
+     * @return bool
      */
-    public function remove(int $productId): void
+    public function remove(int $productId): bool
     {
         $user = $this->security->getUser();
 
@@ -123,13 +121,23 @@ class CartService
                 'user'    => $user,
                 'product' => $productId,
             ]);
+            
+            if (!$item) {
+                return false;
+            }
+
             $this->manager->remove($item);
             $this->manager->flush();
+            return true;
         }
         else {
             $cart = $this->session->get(self::CART_KEY, []);
+            if (!isset($cart[$productId])) {
+                return false;
+            }
             unset($cart[$productId]);
             $this->session->set(self::CART_KEY, $cart);
+            return true;
         }
     }
 

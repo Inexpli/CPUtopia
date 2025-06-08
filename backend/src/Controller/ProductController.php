@@ -41,6 +41,9 @@ final class ProductController extends AbstractController
 
         /** @var UploadedFile|null $file */
         $file = $request->files->get('image');
+if (!$file) {
+    return $this->json(['error' => 'No image file uploaded'], 400);
+}
 
         $product = new Product();
         $product->setName($name);
