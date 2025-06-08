@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/HomePage.tsx";
 import { CartPage } from "@/pages/CartPage.tsx";
 import { UserProvider } from "@/contexts/UserContext";
 import { MyProfile } from "./pages/MyProfile";
+import { Admin } from "./pages/Admin";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/rejestracja" element={<RegisterPage/>}/>
                     <Route path="/koszyk" element={<CartPage/>}/>
                     <Route path="/profil" element={<MyProfile/>}/>
+                    <Route path="/admin" element={<Admin/>}/>
                     {/*
                     <Route path="/zamowienia" element={<OrdersPage/>}/>
                     <Route path="/produkty" element={<ProductsPage/>}/>

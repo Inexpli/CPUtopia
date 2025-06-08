@@ -52,21 +52,21 @@ const categories: Category[] = [
 
 export const HomePage = () => {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-white dark:bg-neutral-900">
             <Navbar/>
             <MainCarousel/>
             
             {/* Categories Section */}
             <section className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Kategorie produktów</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Kategorie produktów</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     {categories.map((category) => (
                         <div
                             key={category.id}
-                            className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col items-center"
+                            className="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col items-center"
                         >
                             <span className="text-4xl mb-3">{category.icon}</span>
-                            <h3 className="text-lg font-medium text-gray-900">{category.name}</h3>
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{category.name}</h3>
                         </div>
                     ))}
                 </div>
@@ -74,12 +74,12 @@ export const HomePage = () => {
 
             {/* Featured Products Section */}
             <section className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Polecane produkty</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Polecane produkty</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {featuredProducts.map((product) => (
                         <div
                             key={product.id}
-                            className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                            className="bg-neutral-50 dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
                         >
                             <img
                                 src={product.image}
@@ -87,9 +87,9 @@ export const HomePage = () => {
                                 className="w-full h-48 object-cover"
                             />
                             <div className="p-4">
-                                <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
-                                <p className="text-xl font-bold text-blue-600 mt-2">{product.price}</p>
-                                <button className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{product.name}</h3>
+                                <p className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-2">{product.price}</p>
+                                <button className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors">
                                     Dodaj do koszyka
                                 </button>
                             </div>
@@ -99,7 +99,7 @@ export const HomePage = () => {
             </section>
 
             {/* Newsletter Section */}
-            <section className="bg-blue-600 text-white py-16">
+            <section className="bg-blue-600 dark:bg-blue-800 text-white py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <h2 className="text-3xl font-bold mb-4">Zapisz się do newslettera</h2>
@@ -108,9 +108,9 @@ export const HomePage = () => {
                             <input
                                 type="email"
                                 placeholder="Twój adres email"
-                                className="flex-1 px-4 py-2 rounded-lg text-gray-900 bg-neutral-200"
+                                className="flex-1 px-4 py-2 rounded-lg text-gray-900 dark:text-white bg-neutral-200 dark:bg-neutral-700 dark:placeholder-gray-400"
                             />
-                            <button className="px-6 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+                            <button className="px-6 py-2 bg-white dark:bg-neutral-200 text-blue-600 dark:text-blue-800 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-300 transition-colors">
                                 Zapisz się
                             </button>
                         </div>
@@ -119,30 +119,30 @@ export const HomePage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-white py-12">
+            <footer className="bg-neutral-900 dark:bg-neutral-950 text-white py-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div>
                             <h3 className="text-xl font-bold mb-4">O nas</h3>
-                            <p className="text-gray-400">
+                            <p className="text-gray-400 dark:text-gray-300">
                                 CPUtopia to Twoje źródło najlepszych komponentów komputerowych w najlepszych cenach.
                             </p>
                         </div>
                         <div>
                             <h3 className="text-xl font-bold mb-4">Kontakt</h3>
-                            <p className="text-gray-400">Email: kontakt@cputopia.pl</p>
-                            <p className="text-gray-400">Tel: +48 123 456 789</p>
+                            <p className="text-gray-400 dark:text-gray-300">Email: kontakt@cputopia.pl</p>
+                            <p className="text-gray-400 dark:text-gray-300">Tel: +48 123 456 789</p>
                         </div>
                         <div>
                             <h3 className="text-xl font-bold mb-4">Śledź nas</h3>
                             <div className="flex space-x-4">
-                                <a href="#" className="text-gray-400 hover:text-white">Facebook</a>
-                                <a href="#" className="text-gray-400 hover:text-white">Instagram</a>
-                                <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
+                                <a href="#" className="text-gray-400 dark:text-gray-300 hover:text-white">Facebook</a>
+                                <a href="#" className="text-gray-400 dark:text-gray-300 hover:text-white">Instagram</a>
+                                <a href="#" className="text-gray-400 dark:text-gray-300 hover:text-white">Twitter</a>
                             </div>
                         </div>
                     </div>
-                    <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+                    <div className="mt-8 pt-8 border-t border-neutral-800 text-center text-gray-400 dark:text-gray-300">
                         <p>&copy; 2024 CPUtopia. Wszelkie prawa zastrzeżone.</p>
                     </div>
                 </div>
