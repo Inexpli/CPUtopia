@@ -3,37 +3,15 @@ import { Plus, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import { useCategories } from "@/hooks/useCategories";
 import { CategoryModal } from "@/components/admin/CategoryModal";
-
-interface Product {
-    id: number;
-    name: string;
-    price: string;
-    image: string;
-    categoryId: number;
-}
-
-// Temporary mock data for products until we implement their functionality
-const mockProducts: Product[] = [
-    {
-        id: 1,
-        name: "Intel Core i9-13900K",
-        price: "2999 zł",
-        image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop",
-        categoryId: 1,
-    },
-    {
-        id: 2,
-        name: "NVIDIA RTX 4080",
-        price: "4999 zł",
-        image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop",
-        categoryId: 2,
-    },
-];
+import { useProducts, Product, ProductCreateData, ProductUpdateData } from "@/hooks/useProducts";
+import { ProductModal } from "@/components/admin/ProductModal";
 
 export const Admin = () => {
     const [activeTab, setActiveTab] = useState<'categories' | 'products'>('categories');
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<{ id: number; name: string } | null>(null);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
     const {
         categories,
@@ -42,6 +20,14 @@ export const Admin = () => {
         updateCategory,
         deleteCategory,
     } = useCategories();
+
+    const {
+        products,
+        isLoading: productsLoading,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+    } = useProducts();
 
     const handleAddCategory = async (data: { name: string }) => {
         try {
@@ -71,6 +57,40 @@ export const Admin = () => {
                 await deleteCategory.mutateAsync(id);
             } catch (error) {
                 console.error('Failed to delete category:', error);
+            }
+        }
+    };
+
+    const handleAddProduct = async (data: ProductCreateData) => {
+        try {
+            await addProduct.mutateAsync(data);
+            setIsProductModalOpen(false);
+        } catch (error) {
+            console.error('Failed to add product:', error);
+        }
+        console.log(data);
+    };
+
+
+    const handleUpdateProduct = async (data: ProductUpdateData) => {
+        if (!editingProduct) return;
+        try {
+            await updateProduct.mutateAsync({
+                id: editingProduct.id,
+                data: data,
+            });
+            setEditingProduct(null);
+        } catch (error) {
+            console.error('Failed to update product:', error);
+        }
+    };
+
+    const handleDeleteProduct = async (id: number) => {
+        if (window.confirm('Czy na pewno chcesz usunąć ten produkt?')) {
+            try {
+                await deleteProduct.mutateAsync(id);
+            } catch (error) {
+                console.error('Failed to delete product:', error);
             }
         }
     };
@@ -121,44 +141,33 @@ export const Admin = () => {
                                 Dodaj Kategorię
                             </button>
                         </div>
-                        
+
                         {categoriesLoading ? (
-                            <div className="flex justify-center items-center py-8">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-                            </div>
+                            <div>Ładowanie...</div>
                         ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                            <th className="text-left py-3 px-4">ID</th>
-                                            <th className="text-left py-3 px-4">Nazwa</th>
-                                            <th className="text-right py-3 px-4">Akcje</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {categories?.map((category) => (
-                                            <tr key={category.id} className="border-b border-neutral-200 dark:border-neutral-700">
-                                                <td className="py-3 px-4">{category.id}</td>
-                                                <td className="py-3 px-4">{category.name}</td>
-                                                <td className="py-3 px-4 text-right">
-                                                    <button
-                                                        onClick={() => setEditingCategory(category)}
-                                                        className="text-blue-600 hover:text-blue-700 p-2"
-                                                    >
-                                                        <Pencil className="w-4 h-4" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteCategory(category.id)}
-                                                        className="text-red-600 hover:text-red-700 p-2"
-                                                    >
-                                                        <Trash className="w-4 h-4" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                            <div className="grid grid-cols-1 gap-4">
+                                {categories?.map((category) => (
+                                    <div
+                                        key={category.id}
+                                        className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg"
+                                    >
+                                        <span className="text-gray-900 dark:text-white">{category.name}</span>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setEditingCategory(category)}
+                                                className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-neutral-600 rounded-lg"
+                                            >
+                                                <Pencil className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteCategory(category.id)}
+                                                className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-neutral-600 rounded-lg"
+                                            >
+                                                <Trash className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
@@ -169,65 +178,91 @@ export const Admin = () => {
                     <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm p-6">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Zarządzanie Produktami</h2>
-                            <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <button
+                                onClick={() => setIsProductModalOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                            >
                                 <Plus className="w-4 h-4" />
                                 Dodaj Produkt
                             </button>
                         </div>
-                        
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                        <th className="text-left py-3 px-4">ID</th>
-                                        <th className="text-left py-3 px-4">Zdjęcie</th>
-                                        <th className="text-left py-3 px-4">Nazwa</th>
-                                        <th className="text-left py-3 px-4">Cena</th>
-                                        <th className="text-left py-3 px-4">Kategoria</th>
-                                        <th className="text-right py-3 px-4">Akcje</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {mockProducts.map((product) => (
-                                        <tr key={product.id} className="border-b border-neutral-200 dark:border-neutral-700">
-                                            <td className="py-3 px-4">{product.id}</td>
-                                            <td className="py-3 px-4">
-                                                <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded" />
-                                            </td>
-                                            <td className="py-3 px-4">{product.name}</td>
-                                            <td className="py-3 px-4">{product.price}</td>
-                                            <td className="py-3 px-4">
-                                                {categories?.find(c => c.id === product.categoryId)?.name}
-                                            </td>
-                                            <td className="py-3 px-4 text-right">
-                                                <button className="text-blue-600 hover:text-blue-700 p-2">
-                                                    <Pencil className="w-4 h-4" />
-                                                </button>
-                                                <button className="text-red-600 hover:text-red-700 p-2">
-                                                    <Trash className="w-4 h-4" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+
+                        {productsLoading ? (
+                            <div>Ładowanie...</div>
+                        ) : (
+                            <div className="grid grid-cols-1 gap-4">
+                                {products?.map((product) => (
+                                    <div
+                                        key={product.id}
+                                        className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <img
+                                                src={product.image}
+                                                alt={product.name}
+                                                className="w-16 h-16 object-cover rounded-lg"
+                                            />
+                                            <div>
+                                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                                                    {product.name}
+                                                </h3>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                    {product.price} zł | Stan: {product.stock}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setEditingProduct(product)}
+                                                className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-neutral-600 rounded-lg"
+                                            >
+                                                <Pencil className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteProduct(product.id)}
+                                                className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-neutral-600 rounded-lg"
+                                            >
+                                                <Trash className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
-            </div>
 
-            {/* Category Modal */}
-            <CategoryModal
-                isOpen={isCategoryModalOpen || editingCategory !== null}
-                onClose={() => {
-                    setIsCategoryModalOpen(false);
-                    setEditingCategory(null);
-                }}
-                onSubmit={editingCategory ? handleUpdateCategory : handleAddCategory}
-                initialData={editingCategory || undefined}
-                title={editingCategory ? "Edytuj kategorię" : "Dodaj nową kategorię"}
-                isLoading={addCategory.isPending || updateCategory.isPending}
-            />
+                {/* Modals */}
+                <CategoryModal
+                    isOpen={isCategoryModalOpen || editingCategory !== null}
+                    onClose={() => {
+                        setIsCategoryModalOpen(false);
+                        setEditingCategory(null);
+                    }}
+                    onSubmit={editingCategory ? handleUpdateCategory : handleAddCategory}
+                    initialData={editingCategory || undefined}
+                    title={editingCategory ? "Edytuj kategorię" : "Dodaj nową kategorię"}
+                    isLoading={addCategory.isPending || updateCategory.isPending}
+                />
+
+                <ProductModal
+                    isOpen={isProductModalOpen || editingProduct !== null}
+                    onClose={() => {
+                        setIsProductModalOpen(false);
+                        setEditingProduct(null);
+                    }}
+                    onSubmit={(data) => {
+                        if (editingProduct) {
+                            handleUpdateProduct(data as ProductUpdateData);
+                        } else {
+                            handleAddProduct(data as ProductCreateData);
+                        }
+                    }}
+                    initialData={editingProduct || undefined}
+                    title={editingProduct ? "Edytuj produkt" : "Dodaj nowy produkt"}
+                    isLoading={addProduct.isPending || updateProduct.isPending}
+                />
+            </div>
         </div>
     );
 };

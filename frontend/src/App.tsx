@@ -3,7 +3,6 @@ import { RegisterPage } from "@/pages/RegisterPage.tsx";
 import { Route, Routes } from "react-router-dom";
 import { LoginPage } from "@/pages/LoginPage.tsx";
 import { HomePage } from "@/pages/HomePage.tsx";
-import { CartPage } from "@/pages/CartPage.tsx";
 import { UserProvider } from "@/contexts/UserContext";
 import { MyProfile } from "./pages/MyProfile";
 import { Admin } from "./pages/Admin";
@@ -16,7 +15,6 @@ function App() {
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/logowanie" element={<LoginPage/>}/>
                     <Route path="/rejestracja" element={<RegisterPage/>}/>
-                    <Route path="/koszyk" element={<CartPage/>}/>
                     <Route path="/profil" element={<MyProfile/>}/>
                     <Route path="/admin" element={<Admin/>}/>
                     {/*

@@ -16,7 +16,7 @@ export const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-            await logout();
+            await logout.mutateAsync();
             setAccountMenuOpen(false);
             window.location.reload();
             navigate("/");
