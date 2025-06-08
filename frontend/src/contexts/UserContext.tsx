@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import axios from 'axios';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '@/config/api';
 
 interface User {
@@ -19,27 +19,32 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const checkAuthStatus = async () => {
+    const { isLoading } = useQuery({
+        queryKey: ['user'],
+        queryFn: async () => {
             try {
-                const response = await axios.get(API_ENDPOINTS.auth.profile, {
-                    withCredentials: true,
+                const response = await fetch(API_ENDPOINTS.auth.profile, {
+                    credentials: 'include',
                 });
-                setUser({
-                    id: response.data.id,
-                    email: response.data.email,
-                    name: response.data.email.split('@')[0]
-                });
+                if (!response.ok) {
+                    setUser(null);
+                    return null;
+                }
+                const data = await response.json();
+                const userData = {
+                    id: data.id,
+                    email: data.email,
+                    name: data.email.split('@')[0]
+                };
+                setUser(userData);
+                return userData;
             } catch {
                 setUser(null);
-            } finally {
-                setIsLoading(false);
+                return null;
             }
-        };
-        checkAuthStatus();
-    }, []);
+        },
+    });
 
     return (
         <UserContext.Provider value={{

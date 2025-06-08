@@ -1,19 +1,14 @@
-import { ReactNode } from 'react';
-import { Navbar } from "@/components/Navbar";
-
-interface AuthFormLayoutProps {
-    title: string;
-    children: ReactNode;
-}
+import { AuthFormLayoutProps } from "@/types/ui"
+import { Navbar } from "@/components/layout/Navbar"
 
 export const AuthFormLayout = ({ title, children }: AuthFormLayoutProps) => {
-    return (
-        <>
-            <Navbar />
-            <div className="w-full max-w-sm mx-auto p-4">
-                <h2 className="text-2xl font-semibold mb-6 text-center">{title}</h2>
-                {children}
-            </div>
-        </>
-    );
-};
+  return (
+    <>
+      <Navbar />
+      <div className="mx-auto w-full max-w-sm p-4">
+        <h2 className="mb-6 text-center text-2xl font-semibold">{title}</h2>
+        {children}
+      </div>
+    </>
+  )
+}
