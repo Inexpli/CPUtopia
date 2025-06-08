@@ -3,6 +3,8 @@ import { Navbar } from "@/components/layout/Navbar"
 import { useProducts } from "@/hooks/products/useProducts"
 import { useCategories } from "@/hooks/categories/useCategories"
 import { useSearchParams } from "react-router-dom"
+import { Spinner } from "@/components/common/Spinner"
+import { useCart } from "@/contexts/CartContext"
 
 export const PcParts = () => {
   const [searchParams] = useSearchParams()
@@ -12,6 +14,7 @@ export const PcParts = () => {
   )
   const { products, isLoading: productsLoading } = useProducts()
   const { categories, isLoading: categoriesLoading } = useCategories()
+  const { addToCart } = useCart()
 
   const handleCategoryToggle = (categoryId: number) => {
     setSelectedCategories(prev => {
@@ -21,6 +24,14 @@ export const PcParts = () => {
         return [...prev, categoryId]
       }
     })
+  }
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      await addToCart(productId)
+    } catch (error: unknown) {
+      console.error("Failed to add product to cart:", error)
+    }
   }
 
   useEffect(() => {
@@ -49,7 +60,9 @@ export const PcParts = () => {
                 Kategorie
               </h2>
               {categoriesLoading ? (
-                <div>Ładowanie kategorii...</div>
+                <div className="py-4">
+                  <Spinner />
+                </div>
               ) : (
                 <div className="space-y-3">
                   {categories?.map(category => (
@@ -74,7 +87,9 @@ export const PcParts = () => {
           {/* Products Grid */}
           <div className="lg:col-span-3">
             {productsLoading ? (
-              <div>Ładowanie produktów...</div>
+              <div className="py-8">
+                <Spinner />
+              </div>
             ) : (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredProducts?.map(product => (
@@ -97,7 +112,10 @@ export const PcParts = () => {
                       <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
                         {product.price} zł
                       </p>
-                      <button className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                      <button
+                        onClick={() => handleAddToCart(product.id)}
+                        className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                      >
                         Dodaj do koszyka
                       </button>
                     </div>

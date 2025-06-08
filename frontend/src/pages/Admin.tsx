@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar"
-import { Plus, Pencil, Trash } from "lucide-react"
+import { Plus, Pencil, Trash, X } from "lucide-react"
 import { useState, useMemo } from "react"
 import { useCategories } from "@/hooks/categories/useCategories"
 import { CategoryModal } from "@/components/admin/CategoryModal"
@@ -7,6 +7,7 @@ import { useProducts } from "@/hooks/products/useProducts"
 import { Product, ProductCreateData, ProductUpdateData } from "@/types/product"
 import { ProductModal } from "@/components/admin/ProductModal"
 import { ProductFilters } from "@/components/admin/ProductFilters"
+import { Spinner } from "@/components/common/Spinner"
 
 export const Admin = () => {
   const [activeTab, setActiveTab] = useState<"categories" | "products">("categories")
@@ -178,7 +179,9 @@ export const Admin = () => {
             </div>
 
             {categoriesLoading ? (
-              <div>Ładowanie...</div>
+              <div className="py-8">
+                <Spinner />
+              </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {categories?.map(category => (
@@ -236,7 +239,9 @@ export const Admin = () => {
             />
 
             {productsLoading ? (
-              <div>Ładowanie...</div>
+              <div className="py-8">
+                <Spinner />
+              </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {filteredProducts.map(product => (

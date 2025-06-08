@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom"
 import { useProducts } from "@/hooks/products/useProducts"
 import { useCategories } from "@/hooks/categories/useCategories"
 import { Category } from "@/types/category"
+import { Spinner } from "@/components/common/Spinner"
+import { useCart } from "@/contexts/CartContext"
 
 export const HomePage = () => {
   const navigate = useNavigate()
   const { products, isLoading: productsLoading } = useProducts()
   const { categories: apiCategories, isLoading: categoriesLoading } = useCategories()
+  const { addToCart } = useCart()
 
   const categories = apiCategories || []
 
@@ -17,6 +20,14 @@ export const HomePage = () => {
       navigate("/pc-parts")
     } else {
       navigate(`/pc-parts?category=${categoryId}`)
+    }
+  }
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      await addToCart(productId)
+    } catch (error: unknown) {
+      console.error("Failed to add product to cart:", error)
     }
   }
 
@@ -43,7 +54,9 @@ export const HomePage = () => {
           Kategorie produktów
         </h2>
         {categoriesLoading ? (
-          <div className="text-center">Ładowanie kategorii...</div>
+          <div className="py-8">
+            <Spinner />
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
             {categories.map((category: Category) => (
@@ -66,7 +79,9 @@ export const HomePage = () => {
         <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">Polecane produkty</h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {productsLoading ? (
-            <div className="col-span-4 text-center">Ładowanie produktów...</div>
+            <div className="col-span-4 py-8">
+              <Spinner />
+            </div>
           ) : (
             featuredProducts.map(product => (
               <div
@@ -85,7 +100,10 @@ export const HomePage = () => {
                   <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
                     {product.price}
                   </p>
-                  <button className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                  <button
+                    onClick={() => handleAddToCart(product.id)}
+                    className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                  >
                     Dodaj do koszyka
                   </button>
                 </div>
