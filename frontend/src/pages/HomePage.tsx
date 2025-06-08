@@ -1,66 +1,36 @@
 import { Navbar } from "@/components/layout/Navbar"
 import { MainCarousel } from "@/components/home/Carousel"
 import { useNavigate } from "react-router-dom"
-
-interface Product {
-  id: number
-  name: string
-  price: string
-  image: string
-}
-
-interface Category {
-  id: number
-  name: string
-  icon: string
-}
-
-const featuredProducts: Product[] = [
-  {
-    id: 1,
-    name: "Intel Core i9-13900K",
-    price: "2999 zł",
-    image:
-      "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    name: "AMD Ryzen 9 7950X",
-    price: "2799 zł",
-    image:
-      "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    name: "NVIDIA RTX 4080",
-    price: "4999 zł",
-    image:
-      "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    name: "AMD Radeon RX 7900 XT",
-    price: "4599 zł",
-    image:
-      "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=1000&auto=format&fit=crop"
-  }
-]
-
-const categories: Category[] = [
-  { id: 1, name: "Procesory", icon: "🔲" },
-  { id: 2, name: "Karty graficzne", icon: "📺" },
-  { id: 3, name: "Płyty główne", icon: "🔌" },
-  { id: 4, name: "Pamięć RAM", icon: "💾" },
-  { id: 5, name: "Dyski", icon: "💿" },
-  { id: 6, name: "Zasilacze", icon: "⚡" }
-]
+import { useProducts } from "@/hooks/products/useProducts"
+import { useCategories } from "@/hooks/categories/useCategories"
+import { Category } from "@/types/category"
 
 export const HomePage = () => {
   const navigate = useNavigate()
+  const { products, isLoading: productsLoading } = useProducts()
+  const { categories: apiCategories, isLoading: categoriesLoading } = useCategories()
+
+  const categories = apiCategories || []
 
   const handleCategoryClick = (categoryId: number) => {
-    navigate(`/pc-parts?category=${categoryId}`)
+    if (categoryId === 1) {
+      navigate("/pc-parts")
+    } else {
+      navigate(`/pc-parts?category=${categoryId}`)
+    }
   }
+
+  const featuredProducts = products
+    ? products
+        .sort((a, b) => b.stock - a.stock)
+        .slice(0, 4)
+        .map(product => ({
+          id: product.id,
+          name: product.name,
+          price: `${product.price} zł`,
+          image: `http://localhost:8080/uploads/products/${product.image}`
+        }))
+    : []
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-900">
@@ -72,47 +42,56 @@ export const HomePage = () => {
         <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
           Kategorie produktów
         </h2>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
-          {categories.map(category => (
-            <div
-              key={category.id}
-              onClick={() => handleCategoryClick(category.id)}
-              className="flex cursor-pointer flex-col items-center rounded-lg bg-neutral-50 p-6 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-800"
-            >
-              <span className="mb-3 text-4xl">{category.icon}</span>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{category.name}</h3>
-            </div>
-          ))}
-        </div>
+        {categoriesLoading ? (
+          <div className="text-center">Ładowanie kategorii...</div>
+        ) : (
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+            {categories.map((category: Category) => (
+              <div
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
+                className="flex cursor-pointer flex-col items-center rounded-lg bg-neutral-50 p-6 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-800"
+              >
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                  {category.name}
+                </h3>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Featured Products Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">Polecane produkty</h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map(product => (
-            <div
-              key={product.id}
-              className="overflow-hidden rounded-lg bg-neutral-50 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-800"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-48 w-full object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                  {product.name}
-                </h3>
-                <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
-                  {product.price}
-                </p>
-                <button className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
-                  Dodaj do koszyka
-                </button>
+          {productsLoading ? (
+            <div className="col-span-4 text-center">Ładowanie produktów...</div>
+          ) : (
+            featuredProducts.map(product => (
+              <div
+                key={product.id}
+                className="overflow-hidden rounded-lg bg-neutral-50 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-800"
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                    {product.name}
+                  </h3>
+                  <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
+                    {product.price}
+                  </p>
+                  <button className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                    Dodaj do koszyka
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </section>
 

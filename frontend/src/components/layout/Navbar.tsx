@@ -8,8 +8,7 @@ import {
   Sun,
   User,
   X,
-  LogOut,
-  Cpu
+  LogOut
 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -40,13 +39,6 @@ export const Navbar = () => {
         {/* Left: Logo */}
         <div className="flex items-center gap-8">
           <MainLogo />
-          <a
-            href="/pc-parts"
-            className="hidden items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 md:flex dark:text-gray-200 dark:hover:text-blue-400"
-          >
-            <Cpu className="h-5 w-5" />
-            Części komputerowe
-          </a>
         </div>
 
         {/* Center: Searchbar (desktop only) */}
@@ -218,15 +210,6 @@ export const Navbar = () => {
 
           {/* Menu items */}
           <nav className="mt-6 flex flex-col gap-4 text-sm">
-            <a
-              href="/pc-parts"
-              className="flex items-center gap-2 py-2 hover:text-blue-600"
-              onClick={() => setMobileOpen(false)}
-            >
-              <Cpu size={16} />
-              Części komputerowe
-            </a>
-
             <div className="relative">
               {isLoggedIn ? (
                 <>
