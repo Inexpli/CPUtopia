@@ -34,7 +34,13 @@ export const useProducts = () => {
       const formData = new FormData()
       Object.entries(data).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
-          formData.append(key, value)
+          if (key === "image" && value instanceof FileList) {
+            if (value.length > 0) {
+              formData.append(key, value[0])
+            }
+          } else {
+            formData.append(key, value)
+          }
         }
       })
 
@@ -56,7 +62,13 @@ export const useProducts = () => {
       const formData = new FormData()
       Object.entries(data).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
-          formData.append(key, value)
+          if (key === "image" && value instanceof FileList) {
+            if (value.length > 0) {
+              formData.append(key, value[0]) // dodaj pierwszy plik z FileList
+            }
+          } else {
+            formData.append(key, value)
+          }
         }
       })
 

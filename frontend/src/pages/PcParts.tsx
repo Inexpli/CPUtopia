@@ -83,7 +83,7 @@ export const PcParts = () => {
                     className="overflow-hidden rounded-lg bg-neutral-50 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-800"
                   >
                     <img
-                      src={`/uploads/products/${product.image}`}
+                      src={`http://localhost:8080/uploads/products/${product.image}`}
                       alt={product.name}
                       className="h-48 w-full object-cover"
                     />
