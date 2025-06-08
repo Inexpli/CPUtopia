@@ -1,181 +1,172 @@
-import { FormInput } from "@/components/ui/form-input";
-import { X } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useEffect } from "react";
-import { useCategories } from "@/hooks/useCategories";
-import { ProductCreateData, ProductUpdateData } from "@/hooks/useProducts";
+import { FormInput } from "@/components/ui/form-input"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { useEffect, useState } from "react"
+import { ProductModalProps } from "@/types/product"
+import { ImageUpload } from "@/components/ui/image-upload"
+import { CategorySelect } from "@/components/ui/category-select"
+import { Button } from "@/components/ui/button"
 
 const productSchema = z.object({
-    name: z.string().min(1, "Nazwa jest wymagana"),
-    description: z.string().min(1, "Opis jest wymagany"),
-    price: z.string().min(1, "Cena jest wymagana").regex(/^\d+(\.\d{1,2})?$/, "Nieprawidłowy format ceny"),
-    stock: z.coerce.number().min(0, "Stan magazynowy nie może być ujemny"),
-    category_id: z.coerce.number().min(1, "Kategoria jest wymagana"),
-    image: z.any()
-});
+  name: z.string().min(1, "Nazwa jest wymagana"),
+  description: z.string().min(1, "Opis jest wymagany"),
+  price: z.coerce.number().min(1, "Cena jest wymagana"),
+  stock: z.coerce.number().min(0, "Stan magazynowy nie może być ujemny"),
+  category_id: z.coerce.number().min(1, "Kategoria jest wymagana"),
+  image: z.any().nullable()
+})
 
-type ProductFormData = z.infer<typeof productSchema>;
-
-interface ProductModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (data: ProductCreateData | ProductUpdateData) => void;
-    initialData?: {
-        name: string;
-        description: string;
-        price: string;
-        stock: number;
-        category_id: number;
-    };
-    title: string;
-    isLoading: boolean;
-}
+type ProductFormData = z.infer<typeof productSchema>
 
 export const ProductModal = ({
-    isOpen,
-    onClose,
-    onSubmit,
-    initialData,
-    title,
-    isLoading,
+  isOpen,
+  onClose,
+  onSubmit,
+  initialData,
+  title,
+  isLoading
 }: ProductModalProps) => {
-    const { categories } = useCategories();
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-    } = useForm<ProductFormData>({
-        resolver: zodResolver(productSchema),
-        defaultValues: initialData ? {
-            ...initialData,
-            category_id: initialData.category_id,
-            stock: initialData.stock,
-        } : undefined,
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      category_id: 0,
+      image: null
+    }
+  })
 
-    useEffect(() => {
-        if (initialData) {
-            reset({
-                ...initialData,
-                category_id: initialData.category_id,
-                stock: initialData.stock,
-            });
-        }
-    }, [initialData, reset]);
+  const imageFile = watch("image")
 
-    if (!isOpen) return null;
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        name: initialData.name,
+        description: initialData.description,
+        price: initialData.price,
+        stock: initialData.stock,
+        category_id: initialData.category_id,
+        image: null
+      })
 
+      if (initialData.image) {
+        setPreviewUrl(`/uploads/products/${initialData.image}`)
+      }
+    }
+  }, [initialData, reset])
 
+  useEffect(() => {
+    if (imageFile?.[0]) {
+      const file = imageFile[0]
+      const url = URL.createObjectURL(file)
+      setPreviewUrl(url)
+      return () => URL.revokeObjectURL(url)
+    } else if (imageFile === null) {
+      setPreviewUrl(null)
+    }
+  }, [imageFile])
 
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 w-full max-w-md relative">
-                <button
-                    onClick={onClose}
-                    className="absolute right-4 top-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                    <X className="w-5 h-5" />
-                </button>
+  if (!isOpen) return null
 
-                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">{title}</h2>
+  return (
+    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 dark:bg-neutral-800">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
-                <form
-                    onSubmit={handleSubmit((data) => {
-                      onSubmit(data);
-                    })}
-                    className="space-y-4"
-                >
-                    <FormInput
-                        label="Nazwa produktu"
-                        type="text"
-                        id="name"
-                        error={errors.name?.message}
-                        {...register("name")}
-                    />
+        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">{title}</h2>
 
-                    <div>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                            Opis produktu
-                        </label>
-                        <textarea
-                            id="description"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
-                            rows={3}
-                            {...register("description")}
-                        />
-                        {errors.description && (
-                            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-                        )}
-                    </div>
+        <form
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onSubmit={handleSubmit(data => onSubmit(data as any))}
+          className="space-y-4"
+        >
+          <FormInput
+            label="Nazwa produktu"
+            type="text"
+            id="name"
+            error={errors.name?.message}
+            {...register("name")}
+          />
 
-                    <FormInput
-                        label="Cena"
-                        type="text"
-                        id="price"
-                        error={errors.price?.message}
-                        {...register("price")}
-                    />
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+              Opis produktu
+            </label>
+            <textarea
+              id="description"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+              rows={3}
+              {...register("description")}
+            />
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+            )}
+          </div>
 
-                    <FormInput
-                        label="Stan magazynowy"
-                        type="number"
-                        id="stock"
-                        error={errors.stock?.message}
-                        {...register("stock")}
-                    />
+          <FormInput
+            label="Cena (zł)"
+            type="number"
+            id="price"
+            error={errors.price?.message}
+            {...register("price")}
+          />
 
-                    <div>
-                        <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                            Kategoria
-                        </label>
-                        <select
-                            id="category_id"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
-                            {...register("category_id")}
-                        >
-                            <option value="">Wybierz kategorię</option>
-                            {categories?.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.category_id && (
-                            <p className="mt-1 text-sm text-red-600">{errors.category_id.message}</p>
-                        )}
-                    </div>
+          <FormInput
+            label="Stan magazynowy"
+            type="number"
+            id="stock"
+            error={errors.stock?.message}
+            {...register("stock")}
+          />
 
-                    <FormInput
-                        label="Zdjęcie produktu"
-                        type="file"
-                        id="image"
-                        accept="image/*"
-                        error={errors.image?.message?.toString()}
-                        {...register("image")}
-                    />
+          <CategorySelect
+            register={register}
+            error={errors.category_id?.message}
+          />
 
-                    <div className="flex justify-end gap-2 mt-6">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded-lg"
-                        >
-                            Anuluj
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400"
-                        >
-                            {isLoading ? "Zapisywanie..." : "Zapisz"}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
-}; 
+          <ImageUpload
+            previewUrl={previewUrl}
+            setValue={setValue}
+            initialImage={initialData?.image}
+          />
+
+          <div className="mt-6 flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={onClose}
+            >
+              Anuluj
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Zapisywanie..." : "Zapisz"}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

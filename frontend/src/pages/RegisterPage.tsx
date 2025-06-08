@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "../schemas/auth";
-import { useRegister } from "../hooks/useRegister";
+import { useRegister } from "@/hooks/auth/useRegister";
 import { FormInput } from "@/components/ui/form-input";
 import { AuthFormLayout } from "@/components/auth/auth-form-layout";
 
@@ -15,12 +15,8 @@ export const RegisterPage = () => {
     const { mutateAsync: registerUser, isPending } = useRegister();
 
     const onSubmit = async (data: RegisterFormData) => {
-        try {
             await registerUser(data);
             navigate("/logowanie");
-        } catch (error) {
-            // Error handled in useRegister hook
-        }
     };
 
     return (

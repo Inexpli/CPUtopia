@@ -11,26 +11,27 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-  proxy: {
-    '/uploads': {
-      target: 'http://nginx',
-      changeOrigin: true,
-      configure: (proxy, options) => {
-        proxy.on('proxyReq', (proxyReq, req, res) => {
-          console.log('Proxying request to backend:', req.url)
-        })
-        proxy.on('error', (err, req, res) => {
-          console.error('Proxy error:', err)
-          if (!res.headersSent) {
-            res.writeHead(500, {
-              'Content-Type': 'text/plain',
-            })
-          }
-          res.end('Proxy error: ' + err.message)
-        })
-      }
-    }
-  }
-  }
+  // zeby sciezka do zdjec byla naturalna
+  // server: {
+  // proxy: {
+  //   '/uploads': {
+  //     target: 'http://localhost:8080',
+  //     changeOrigin: true,
+  //     configure: (proxy) => {
+  //       proxy.on('proxyReq', (_proxyReq, req) => {
+  //         console.log('Proxying request to backend:', req.url)
+  //       })
+  //       proxy.on('error', (err, _req, res) => {
+  //         console.error('Proxy error:', err)
+  //         if (!res.headersSent) {
+  //           res.writeHead(500, {
+  //             'Content-Type': 'text/plain',
+  //           })
+  //         }
+  //         res.end('Proxy error: ' + err.message)
+  //       })
+  //     }
+  //   }
+  // }
+  // }
 })
