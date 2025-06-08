@@ -1,4 +1,6 @@
-
+public/uploads
+/public/uploads/products/
+*.webp
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
