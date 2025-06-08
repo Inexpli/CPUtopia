@@ -14,5 +14,10 @@ export const API_ENDPOINTS = {
         delete: `${API_URL}/api/category/{id}`,
     },
     product:{
+        get: `${API_URL}/api/product`,
+        getDetails: `${API_URL}/api/product/{id}`,
+        add: `${API_URL}/api/product/add`,
+        update: `${API_URL}/api/product/{id}`,
+        delete: `${API_URL}/api/product/{id}`,
     }
 } as const; 

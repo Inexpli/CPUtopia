@@ -1,19 +1,28 @@
-import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '@/config/api';
 import { useUser } from '@/contexts/UserContext';
-import { useCallback } from 'react';
 
 export const useLogout = () => {
     const { setUser } = useUser();
 
-    return useCallback(async () => {
-        try {
-            await axios.post(API_ENDPOINTS.auth.logout, {}, {
-                withCredentials: true,
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const response = await fetch(API_ENDPOINTS.auth.logout, {
+                method: 'POST',
+                credentials: 'include',
             });
+            if (!response.ok) {
+                throw new Error('Logout failed');
+            }
+            return response.json();
+        },
+        onSuccess: () => {
             setUser(null);
-        } catch (error) {
+        },
+        onError: (error) => {
             console.error('Logout failed:', error);
         }
-    }, [setUser]);
+    });
+
+    return mutation;
 }; 

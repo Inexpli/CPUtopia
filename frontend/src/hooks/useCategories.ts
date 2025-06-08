@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { API_ENDPOINTS } from "@/config/api";
 
 interface Category {
@@ -23,20 +22,25 @@ export const useCategories = () => {
     const { data: categories, isLoading, error } = useQuery<Category[]>({
         queryKey: ["categories"],
         queryFn: async () => {
-            const response = await axios.get(API_ENDPOINTS.category.get, {
-                withCredentials: true
+            const response = await fetch(API_ENDPOINTS.category.get, {
+                credentials: 'include'
             });
-            return response.data;
+            return response.json();
         },
     });
 
     // Add category
     const addCategory = useMutation({
         mutationFn: async (data: CategoryCreateData) => {
-            const response = await axios.post(API_ENDPOINTS.category.add, data, {
-                withCredentials: true
+            const response = await fetch(API_ENDPOINTS.category.add, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(data)
             });
-            return response.data;
+            return response.json();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["categories"] });
@@ -46,12 +50,17 @@ export const useCategories = () => {
     // Update category
     const updateCategory = useMutation({
         mutationFn: async ({ id, data }: { id: number; data: CategoryUpdateData }) => {
-            const response = await axios.put(
-                API_ENDPOINTS.category.update.replace('{id}', id.toString()),
-                data,
-                { withCredentials: true }
+            const response = await fetch(
+                API_ENDPOINTS.category.update.replace('{id}', id.toString()), {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                }
             );
-            return response.data;
+            return response.json();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["categories"] });
@@ -61,11 +70,13 @@ export const useCategories = () => {
     // Delete category
     const deleteCategory = useMutation({
         mutationFn: async (id: number) => {
-            const response = await axios.delete(
-                API_ENDPOINTS.category.delete.replace('{id}', id.toString()),
-                { withCredentials: true }
+            const response = await fetch(
+                API_ENDPOINTS.category.delete.replace('{id}', id.toString()), {
+                    method: 'DELETE',
+                    credentials: 'include'
+                }
             );
-            return response.data;
+            return response.json();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["categories"] });
