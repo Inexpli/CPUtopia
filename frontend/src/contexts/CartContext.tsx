@@ -32,8 +32,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         headers: {
           "Content-Type": "application/json"
         },
-        credentials: "include",
-        body: JSON.stringify({ quantity: 1 })
+        credentials: "include"
       })
       if (!response.ok) {
         throw new Error("Failed to add item to cart")
@@ -45,8 +44,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   })
 
+  const updateQuantity = useMutation({
+    mutationFn: async ({ productId, quantity }: { productId: number; quantity: number }) => {
+      const response = await fetch(API_ENDPOINTS.cart.add.replace("{id}", productId.toString()), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ quantity }),
+        credentials: "include"
+      })
+      if (!response.ok) {
+        throw new Error("Failed to update quantity")
+      }
+      return response.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] })
+    }
+  })
+
   const removeFromCart = useMutation({
     mutationFn: async (productId: number) => {
+      if (typeof productId !== "number") {
+        throw new Error("Invalid product ID")
+      }
+
       const response = await fetch(
         API_ENDPOINTS.cart.remove.replace("{id}", productId.toString()),
         {
@@ -95,6 +118,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         error: error as Error | null,
         addToCart: (productId: number) => addToCart.mutateAsync(productId),
+        updateQuantity: (productId: number, quantity: number) =>
+          updateQuantity.mutateAsync({ productId, quantity }),
         removeFromCart: (productId: number) => removeFromCart.mutateAsync(productId),
         clearCart: () => clearCart.mutateAsync(),
         refreshCart

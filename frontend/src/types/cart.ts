@@ -11,6 +11,7 @@ export interface CartContextType {
   isLoading: boolean
   error: Error | null
   addToCart: (productId: number) => Promise<void>
+  updateQuantity: (productId: number, quantity: number) => Promise<void>
   removeFromCart: (productId: number) => Promise<void>
   clearCart: () => Promise<void>
   refreshCart: () => Promise<void>

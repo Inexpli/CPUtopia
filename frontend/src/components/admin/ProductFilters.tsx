@@ -1,5 +1,5 @@
 import { Search, SortAsc, SortDesc } from "lucide-react"
-import { useCategories } from "@/hooks/categories/useCategories"
+import { useCategories } from "@/hooks/useCategories"
 import { ProductFiltersProps } from "@/types/product"
 
 export const ProductFilters = ({

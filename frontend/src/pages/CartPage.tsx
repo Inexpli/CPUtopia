@@ -1,10 +1,11 @@
 import { Navbar } from "@/components/layout/Navbar"
 import { useCart } from "@/contexts/CartContext"
 import { Spinner } from "@/components/common/Spinner"
+import { QuantityInput } from "@/components/common/QuantityInput"
 import { Trash } from "lucide-react"
 
 export const CartPage = () => {
-  const { items, isLoading, removeFromCart, clearCart } = useCart()
+  const { items, isLoading, removeFromCart, clearCart, updateQuantity } = useCart()
 
   console.log("Cart items:", items)
 
@@ -12,10 +13,27 @@ export const CartPage = () => {
 
   const handleRemoveFromCart = async (productId: number) => {
     try {
+      if (typeof productId !== "number" || !Number.isFinite(productId)) {
+        console.error("Invalid product ID:", productId)
+        return
+      }
+      console.log("Cart items:", items)
       console.log("Removing product with ID:", productId)
       await removeFromCart(productId)
     } catch (error: unknown) {
       console.error("Failed to remove product from cart:", error)
+    }
+  }
+
+  const handleUpdateQuantity = async (productId: number, quantity: number) => {
+    try {
+      if (quantity < 1) {
+        await removeFromCart(productId)
+        return
+      }
+      await updateQuantity(productId, quantity)
+    } catch (error: unknown) {
+      console.error("Failed to update quantity:", error)
     }
   }
 
@@ -105,7 +123,12 @@ export const CartPage = () => {
                       </td>
 
                       <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 dark:text-white">
-                        {item.quantity}
+                        <QuantityInput
+                          value={item.quantity}
+                          onChange={quantity => handleUpdateQuantity(item.product.id, quantity)}
+                          min={1}
+                          max={item.product.stock}
+                        />
                       </td>
 
                       <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 dark:text-white">
@@ -116,7 +139,10 @@ export const CartPage = () => {
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                         <button
-                          onClick={() => handleRemoveFromCart(item.product.id)}
+                          onClick={() => {
+                            console.log("Product ID from item:", item.product.id)
+                            handleRemoveFromCart(item.product.id)
+                          }}
                           className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                         >
                           <Trash className="h-5 w-5" />
