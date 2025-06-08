@@ -198,7 +198,7 @@ export const Admin = () => {
                                     >
                                         <div className="flex items-center gap-4">
                                             <img
-                                                src={product.image}
+                                                src={`/uploads/products/${product.image}`}
                                                 alt={product.name}
                                                 className="w-16 h-16 object-cover rounded-lg"
                                             />
