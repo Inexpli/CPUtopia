@@ -1,4 +1,4 @@
-import { useCategories } from "@/hooks/categories/useCategories"
+import { useCategories } from "@/hooks/useCategories"
 import { UseFormRegister } from "react-hook-form"
 
 interface CategorySelectProps {

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import type { RegisterFormData } from "../schemas/auth"
+import type { RegisterFormData } from "@/schemas/auth"
 import { API_ENDPOINTS } from "@/config/api"
 import { RegisterResponse } from "@/types/user"
 

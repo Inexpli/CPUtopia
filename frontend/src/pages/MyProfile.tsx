@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar"
 import { useUserProfile } from "@/hooks/auth/useUserProfile"
+import { Spinner } from "@/components/common/Spinner"
 
 export const MyProfile = () => {
   const { data: user, isLoading, error } = useUserProfile()
@@ -9,7 +10,7 @@ export const MyProfile = () => {
       <>
         <Navbar />
         <div className="flex min-h-[200px] items-center justify-center p-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600" />
+          <Spinner />
         </div>
       </>
     )

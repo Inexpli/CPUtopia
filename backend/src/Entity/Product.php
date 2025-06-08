@@ -16,6 +16,7 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['cart'])]
     private ?int $id = null;
 
     #[Assert\Type(Category::class)]
