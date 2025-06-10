@@ -9,6 +9,7 @@ import { MyProfile } from "./pages/MyProfile"
 import { Admin } from "./pages/Admin"
 import { PcParts } from "./pages/PcParts"
 import { CartPage } from "./pages/CartPage"
+import { ProductDetails } from "./pages/ProductDetails"
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
             <Route
               path="/basket"
               element={<CartPage />}
+            />
+            <Route
+              path="/product/:id"
+              element={<ProductDetails />}
             />
           </Routes>
         </div>
