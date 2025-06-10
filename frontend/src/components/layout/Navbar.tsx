@@ -19,6 +19,7 @@ import { useUser } from "@/contexts/UserContext"
 import { useLogout } from "@/hooks/auth/useLogout"
 import { useCart } from "@/contexts/CartContext"
 import { useProductSearch } from "@/hooks/useProductSearch"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -28,13 +29,22 @@ export const Navbar = () => {
   const { items } = useCart()
   const logout = useLogout()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { searchQuery, setSearchQuery, searchResults } = useProductSearch()
 
   const handleLogout = async () => {
-    await logout.mutateAsync()
-    setAccountMenuOpen(false)
-    window.location.reload()
-    navigate("/")
+    try {
+      await logout.mutateAsync()
+      setAccountMenuOpen(false)
+      // Invalidate all queries to force a fresh state
+      await queryClient.invalidateQueries()
+      // Reset the query client to clear all cache
+      queryClient.resetQueries()
+      // Navigate to home page
+      navigate("/", { replace: true })
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
   }
 
   const handleSearchSelect = (productId: number) => {

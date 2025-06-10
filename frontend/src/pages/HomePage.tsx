@@ -98,7 +98,8 @@ export const HomePage = () => {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="h-48 w-full object-cover"
+                  className="h-48 w-full object-cover cursor-pointer"
+                  onClick={() => navigate(`/product/${product.id}`)}
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white">
