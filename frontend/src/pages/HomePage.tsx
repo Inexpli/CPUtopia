@@ -13,7 +13,12 @@ export const HomePage = () => {
   const { categories: apiCategories, isLoading: categoriesLoading } = useCategories()
   const { addToCart } = useCart()
 
-  const categories = apiCategories || []
+  const desiredCategoryIds = [14, 31, 33, 35, 32, 21]
+  const categories = apiCategories
+    ? desiredCategoryIds
+        .map(id => apiCategories.find(cat => cat.id === id))
+        .filter((cat): cat is Category => cat !== undefined)
+    : []
 
   const handleCategoryClick = (categoryId: number) => {
     if (categoryId === 1) {
@@ -51,7 +56,7 @@ export const HomePage = () => {
       {/* Categories Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
-          Kategorie produktów
+          🔥Najgorętsze produkty🔥
         </h2>
         {categoriesLoading ? (
           <div className="py-8">
@@ -76,7 +81,9 @@ export const HomePage = () => {
 
       {/* Featured Products Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">Polecane produkty</h2>
+        <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
+          🔍Polecane produkty🔍
+        </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {productsLoading ? (
             <div className="col-span-4 py-8">

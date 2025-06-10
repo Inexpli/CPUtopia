@@ -18,6 +18,7 @@ import { useDarkMode } from "@/hooks/useDarkMode"
 import { useUser } from "@/contexts/UserContext"
 import { useLogout } from "@/hooks/auth/useLogout"
 import { useCart } from "@/contexts/CartContext"
+import { useProductSearch } from "@/hooks/useProductSearch"
 
 export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -27,12 +28,18 @@ export const Navbar = () => {
   const { items } = useCart()
   const logout = useLogout()
   const navigate = useNavigate()
+  const { searchQuery, setSearchQuery, searchResults } = useProductSearch()
 
   const handleLogout = async () => {
     await logout.mutateAsync()
     setAccountMenuOpen(false)
     window.location.reload()
     navigate("/")
+  }
+
+  const handleSearchSelect = (productId: number) => {
+    setSearchQuery("")
+    navigate(`/product/${productId}`)
   }
 
   const cartItemsCount = items.reduce((sum, item) => sum + item.quantity, 0)
@@ -58,9 +65,36 @@ export const Navbar = () => {
               </div>
               <input
                 type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder="Szukaj produktów..."
               />
+              {searchResults.length > 0 && (
+                <div className="absolute mt-2 w-full rounded-lg border border-gray-200 bg-white py-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
+                  {searchResults.map(product => (
+                    <button
+                      key={product.id}
+                      onClick={() => handleSearchSelect(product.id)}
+                      className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-neutral-700"
+                    >
+                      <img
+                        src={`http://localhost:8080/uploads/products/${product.image}`}
+                        alt={product.name}
+                        className="h-10 w-10 rounded object-cover"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {product.name}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {product.price} zł
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -201,9 +235,36 @@ export const Navbar = () => {
             </div>
             <input
               type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               placeholder="Szukaj produktów..."
             />
+            {searchResults.length > 0 && (
+              <div className="absolute mt-2 w-full rounded-lg border border-gray-200 bg-white py-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
+                {searchResults.map(product => (
+                  <button
+                    key={product.id}
+                    onClick={() => handleSearchSelect(product.id)}
+                    className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    <img
+                      src={`http://localhost:8080/uploads/products/${product.image}`}
+                      alt={product.name}
+                      className="h-10 w-10 rounded object-cover"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        {product.name}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {product.price} zł
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <nav className="flex flex-col space-y-4">
