@@ -144,7 +144,7 @@ export const Admin = () => {
             onClick={() => setActiveTab("categories")}
             className={`rounded-lg px-4 py-2 ${
               activeTab === "categories"
-                ? "bg-blue-600 text-white"
+                ? "bg-green-600 text-white"
                 : "bg-neutral-100 text-gray-900 dark:bg-neutral-800 dark:text-white"
             }`}
           >
@@ -154,7 +154,7 @@ export const Admin = () => {
             onClick={() => setActiveTab("products")}
             className={`rounded-lg px-4 py-2 ${
               activeTab === "products"
-                ? "bg-blue-600 text-white"
+                ? "bg-green-600 text-white"
                 : "bg-neutral-100 text-gray-900 dark:bg-neutral-800 dark:text-white"
             }`}
           >
@@ -193,7 +193,7 @@ export const Admin = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setEditingCategory(category)}
-                        className="rounded-lg p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-neutral-600"
+                        className="rounded-lg p-2 text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-neutral-600"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
@@ -267,7 +267,7 @@ export const Admin = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setEditingProduct(product)}
-                        className="rounded-lg p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-neutral-600"
+                        className="rounded-lg p-2 text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-neutral-600"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>

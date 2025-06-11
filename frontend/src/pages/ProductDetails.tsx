@@ -57,7 +57,7 @@ export const ProductDetails = () => {
       <>
         <Navbar />
         <div className="flex h-[calc(100vh-64px)] items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-600 border-t-transparent"></div>
         </div>
       </>
     )
@@ -114,7 +114,7 @@ export const ProductDetails = () => {
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
                       {product.name}
                     </h1>
-                    <p className="mt-4 text-3xl font-semibold tracking-tight text-blue-600 dark:text-blue-400">
+                    <p className="mt-4 text-3xl font-semibold tracking-tight text-green-600 dark:text-green-400">
                       {product.price.toLocaleString("pl-PL")} zł
                     </p>
                   </div>
@@ -145,7 +145,7 @@ export const ProductDetails = () => {
                         <button
                           onClick={handleAddToCart}
                           disabled={product.stock === 0}
-                          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 p-4 text-lg font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-neutral-800"
+                          className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 p-4 text-lg font-medium text-white transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-offset-neutral-800"
                         >
                           <ShoppingCart className="h-5 w-5" />
                           {product.stock === 0 ? "Brak w magazynie" : "Dodaj do koszyka"}

@@ -14,7 +14,10 @@ const productSchema = z.object({
   description: z.string().min(1, "Opis jest wymagany"),
   price: z.coerce.number().min(1, "Cena jest wymagana"),
   stock: z.coerce.number().min(0, "Stan magazynowy nie może być ujemny"),
-  category_id: z.coerce.number().min(1, "Kategoria jest wymagana"),
+  category_id: z
+    .string()
+    .transform(val => (val === "" ? 0 : Number(val)))
+    .pipe(z.number().min(1, "Kategoria jest wymagana")),
   image: z.any().nullable()
 })
 
@@ -44,7 +47,7 @@ export const ProductModal = ({
       description: "",
       price: 0,
       stock: 0,
-      category_id: 0,
+      category_id: undefined,
       image: null
     }
   })
@@ -115,7 +118,7 @@ export const ProductModal = ({
             </label>
             <textarea
               id="description"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
               rows={3}
               {...register("description")}
             />

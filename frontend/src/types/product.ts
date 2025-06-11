@@ -15,7 +15,7 @@ export interface ProductCreateData {
   description: string
   price: number
   stock: number
-  category_id: number
+  category_id: string
   image?: File | null
 }
 
@@ -24,7 +24,7 @@ export interface ProductUpdateData {
   description?: string
   price?: number
   stock?: number
-  category_id?: number
+  category_id?: string
   image?: File | null
 }
 

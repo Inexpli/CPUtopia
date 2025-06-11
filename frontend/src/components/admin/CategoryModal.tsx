@@ -76,7 +76,7 @@ export const CategoryModal = ({
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-blue-400"
+              className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:bg-green-400"
             >
               {isLoading ? "Zapisywanie..." : "Zapisz"}
             </button>

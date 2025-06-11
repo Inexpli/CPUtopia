@@ -69,7 +69,7 @@ export const LoginPage = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="mt-4 w-full rounded-md bg-blue-600 p-2 text-white hover:bg-blue-700 disabled:bg-blue-400"
+          className="mt-4 w-full rounded-md bg-green-600 p-2 text-white hover:bg-green-700 disabled:bg-green-400"
         >
           {isPending ? "Logowanie..." : "Zaloguj się"}
         </button>
