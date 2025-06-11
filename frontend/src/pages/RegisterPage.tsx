@@ -5,9 +5,11 @@ import { registerSchema, type RegisterFormData } from "../schemas/auth"
 import { useRegister } from "@/hooks/auth/useRegister"
 import { FormInput } from "@/components/ui/form-input"
 import { AuthFormLayout } from "@/components/auth/auth-form-layout"
+import { useState } from "react"
 
 export const RegisterPage = () => {
   const navigate = useNavigate()
+  const [backendError, setBackendError] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -19,8 +21,17 @@ export const RegisterPage = () => {
   const { mutateAsync: registerUser, isPending } = useRegister()
 
   const onSubmit = async (data: RegisterFormData) => {
-    await registerUser(data)
-    navigate("/login")
+    try {
+      setBackendError(null)
+      await registerUser(data)
+      navigate("/login")
+    } catch (error) {
+      if (error instanceof Error) {
+        setBackendError(error.message)
+      } else {
+        setBackendError("Wystąpił nieoczekiwany błąd podczas rejestracji")
+      }
+    }
   }
 
   return (
@@ -29,6 +40,11 @@ export const RegisterPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4"
       >
+        {backendError && (
+          <div className="rounded-md bg-red-50 p-4 text-sm text-red-500 dark:bg-red-900/50 dark:text-red-200">
+            {backendError}
+          </div>
+        )}
         <FormInput
           label="Email"
           type="email"
