@@ -1,26 +1,30 @@
-import * as z from 'zod';
+import * as z from "zod"
 
-export const registerSchema = z.object({
-    email: z.string()
-        .email('Nieprawidłowy format adresu email')
-        .min(1, 'Email jest wymagany'),
-    password: z.string()
-        .min(8, 'Hasło musi mieć minimum 8 znaków')
-        .regex(/[A-Z]/, 'Hasło musi zawierać przynajmniej jedną wielką literę')
-        .regex(/[0-9]/, 'Hasło musi zawierać przynajmniej jedną cyfrę'),
+export const registerSchema = z
+  .object({
+    email: z.string().email("Nieprawidłowy format adresu email").min(1, "Email jest wymagany"),
+    password: z
+      .string()
+      .min(8, "Hasło musi mieć minimum 8 znaków")
+      .regex(/[A-Z]/, "Hasło musi zawierać przynajmniej jedną wielką literę")
+      .regex(/[a-z]/, "Hasło musi zawierać przynajmniej jedną małą literę")
+      .regex(/[0-9]/, "Hasło musi zawierać przynajmniej jedną cyfrę")
+      .regex(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        'Hasło musi zawierać przynajmniej jeden znak specjalny (!@#$%^&*(),.?":{}|<>)'
+      )
+      .min(1, "Hasło jest wymagane"),
     confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
+  })
+  .refine(data => data.password === data.confirmPassword, {
     message: "Hasła muszą być takie same",
-    path: ["confirmPassword"],
-});
+    path: ["confirmPassword"]
+  })
 
 export const loginSchema = z.object({
-    email: z.string()
-        .email('Nieprawidłowy format adresu email')
-        .min(1, 'Email jest wymagany'),
-    password: z.string()
-        .min(1, 'Hasło jest wymagane'),
-});
+  email: z.string().email("Nieprawidłowy format adresu email").min(1, "Email jest wymagany"),
+  password: z.string().min(1, "Hasło jest wymagane")
+})
 
-export type RegisterFormData = z.infer<typeof registerSchema>;
-export type LoginFormData = z.infer<typeof loginSchema>; 
+export type RegisterFormData = z.infer<typeof registerSchema>
+export type LoginFormData = z.infer<typeof loginSchema>
