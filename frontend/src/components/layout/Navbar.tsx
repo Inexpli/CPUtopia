@@ -1,15 +1,4 @@
-import {
-  Headphones,
-  Heart,
-  Menu,
-  Moon,
-  Search,
-  ShoppingCart,
-  Sun,
-  User,
-  X,
-  LogOut
-} from "lucide-react"
+import { Menu, Moon, Search, ShoppingCart, Sun, User, X, LogOut } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { MainLogo } from "@/components/layout/MainLogo"
@@ -77,7 +66,7 @@ export const Navbar = () => {
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-green-500 focus:ring-green-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-green-500 dark:focus:ring-green-500"
                 placeholder="Szukaj produktów..."
               />
               {searchResults.length > 0 && (
@@ -111,45 +100,30 @@ export const Navbar = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
+              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none lg:block dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-
-            <button
-              onClick={() => navigate("/pomoc")}
-              className="hidden rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none lg:block dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
-            >
-              <Headphones className="h-5 w-5" />
-            </button>
-
-            <button
-              onClick={() => navigate("/ulubione")}
-              className="hidden rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none lg:block dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
-            >
-              <Heart className="h-5 w-5" />
-            </button>
-
             <button
               onClick={() => navigate("/basket")}
               className="relative hidden rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none lg:block dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
             >
               <ShoppingCart className="h-5 w-5" />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white">
                   {cartItemsCount}
                 </span>
               )}
             </button>
 
-            <div className="relative">
+            <div className="relative hidden lg:block">
               <button
                 onClick={() => setAccountMenuOpen(!accountMenuOpen)}
                 className="flex items-center rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none dark:text-gray-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
               >
                 <User className="h-5 w-5" />
                 {isLoggedIn && (
-                  <span className="ml-2 hidden text-sm font-medium text-gray-900 lg:block dark:text-white">
+                  <span className="ml-2 text-sm font-medium text-gray-900 dark:text-white">
                     {user?.name}
                   </span>
                 )}
@@ -247,11 +221,11 @@ export const Navbar = () => {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-green-500 focus:ring-green-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-green-500 dark:focus:ring-green-500"
               placeholder="Szukaj produktów..."
             />
             {searchResults.length > 0 && (
-              <div className="absolute mt-2 w-full rounded-lg border border-gray-200 bg-white py-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
+              <div className="absolute z-50 mt-2 w-full rounded-lg border border-gray-200 bg-white py-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-800">
                 {searchResults.map(product => (
                   <button
                     key={product.id}
@@ -278,35 +252,89 @@ export const Navbar = () => {
           </div>
 
           <nav className="flex flex-col space-y-4">
-            <a
-              href="/pomoc"
-              className="flex items-center gap-2 hover:text-blue-600"
-              onClick={() => setMobileOpen(false)}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="flex items-center gap-2 hover:text-green-600"
             >
-              <Headphones size={16} /> Pomoc
-            </a>
-            <a
-              href="/ulubione"
-              className="flex items-center gap-2 hover:text-blue-600"
-              onClick={() => setMobileOpen(false)}
-            >
-              <Heart size={16} /> Ulubione
-            </a>
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <span>{darkMode ? "Tryb jasny" : "Tryb ciemny"}</span>
+            </button>
+
             <a
               href="/basket"
-              className="flex items-center gap-2 hover:text-blue-600"
+              className="flex items-center gap-2 hover:text-green-600"
               onClick={() => setMobileOpen(false)}
             >
               <div className="relative">
                 <ShoppingCart size={16} />
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white">
                     {cartItemsCount}
                   </span>
                 )}
               </div>
               Koszyk
             </a>
+
+            {isLoggedIn ? (
+              <>
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <User size={16} />
+                  {user?.name}
+                </div>
+                <a
+                  href="/profil"
+                  className="ml-6 block text-sm text-gray-700 hover:text-green-600 dark:text-gray-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Mój profil
+                </a>
+                <a
+                  href="/zamowienia"
+                  className="ml-6 block text-sm text-gray-700 hover:text-green-600 dark:text-gray-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Zamówienia
+                </a>
+                {user?.email === "admin@cputopia.pl" && (
+                  <a
+                    href="/admin"
+                    className="ml-6 block text-sm text-gray-700 hover:text-green-600 dark:text-gray-200"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Panel admina
+                  </a>
+                )}
+                <button
+                  onClick={() => {
+                    handleLogout()
+                    setMobileOpen(false)
+                  }}
+                  className="flex items-center gap-2 text-sm text-red-600 hover:text-red-700 dark:text-red-400"
+                >
+                  <LogOut size={16} />
+                  Wyloguj się
+                </button>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-green-600 dark:text-gray-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <User size={16} />
+                  Zaloguj się
+                </a>
+                <a
+                  href="/register"
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-green-600 dark:text-gray-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Zarejestruj się
+                </a>
+              </>
+            )}
           </nav>
         </div>
       </div>

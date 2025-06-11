@@ -19,7 +19,7 @@ export const CategorySelect = ({ register, error }: CategorySelectProps) => {
       </label>
       <select
         id="category_id"
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
         {...register("category_id")}
       >
         <option value="">Wybierz kategorię</option>

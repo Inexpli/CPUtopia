@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar"
 import { MainCarousel } from "@/components/home/Carousel"
+import { WelcomeSection } from "@/components/home/WelcomeSection"
 import { useNavigate } from "react-router-dom"
 import { useProducts } from "@/hooks/useProducts"
 import { useCategories } from "@/hooks/useCategories"
@@ -52,11 +53,12 @@ export const HomePage = () => {
     <div className="min-h-screen bg-white dark:bg-neutral-900">
       <Navbar />
       <MainCarousel />
+      <WelcomeSection />
 
       {/* Categories Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
-          🔥Najgorętsze produkty🔥
+          🔥Najgorętsze kategorie🔥
         </h2>
         {categoriesLoading ? (
           <div className="py-8">
@@ -98,19 +100,19 @@ export const HomePage = () => {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="h-48 w-full object-cover cursor-pointer"
+                  className="h-48 w-full cursor-pointer object-cover"
                   onClick={() => navigate(`/product/${product.id}`)}
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                     {product.name}
                   </h3>
-                  <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
+                  <p className="mt-2 text-xl font-bold text-green-600 dark:text-green-400">
                     {product.price}
                   </p>
                   <button
                     onClick={() => handleAddToCart(product.id)}
-                    className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    className="mt-4 w-full rounded bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                   >
                     Dodaj do koszyka
                   </button>
@@ -122,7 +124,7 @@ export const HomePage = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-blue-600 py-16 text-white dark:bg-blue-800">
+      <section className="bg-green-600 py-16 text-white dark:bg-green-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="mb-4 text-3xl font-bold">Zapisz się do newslettera</h2>
@@ -133,7 +135,7 @@ export const HomePage = () => {
                 placeholder="Twój adres email"
                 className="flex-1 rounded-lg bg-neutral-200 px-4 py-2 text-gray-900 dark:bg-neutral-700 dark:text-white dark:placeholder-gray-400"
               />
-              <button className="rounded-lg bg-white px-6 py-2 font-semibold text-blue-600 transition-colors hover:bg-gray-100 dark:bg-neutral-200 dark:text-blue-800 dark:hover:bg-neutral-300">
+              <button className="rounded-lg bg-white px-6 py-2 font-semibold text-green-600 transition-colors hover:bg-gray-100 dark:bg-neutral-200 dark:text-green-800 dark:hover:bg-neutral-300">
                 Zapisz się
               </button>
             </div>
@@ -142,38 +144,38 @@ export const HomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 py-12 text-white dark:bg-neutral-950">
+      <footer className="py-12 dark:bg-neutral-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <div>
               <h3 className="mb-4 text-xl font-bold">O nas</h3>
-              <p className="text-gray-400 dark:text-gray-300">
+              <p className="text-neutral-700 dark:text-gray-300">
                 CPUtopia to Twoje źródło najlepszych komponentów komputerowych w najlepszych cenach.
               </p>
             </div>
             <div>
               <h3 className="mb-4 text-xl font-bold">Kontakt</h3>
-              <p className="text-gray-400 dark:text-gray-300">Email: kontakt@cputopia.pl</p>
-              <p className="text-gray-400 dark:text-gray-300">Tel: +48 123 456 789</p>
+              <p className="text-gray-700 dark:text-gray-300">Email: kontakt@cputopia.pl</p>
+              <p className="text-gray-700 dark:text-gray-300">Tel: +48 123 456 789</p>
             </div>
             <div>
               <h3 className="mb-4 text-xl font-bold">Śledź nas</h3>
               <div className="flex space-x-4">
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white dark:text-gray-300"
+                  className="text-gray-600 hover:text-green-600 dark:text-gray-300"
                 >
                   Facebook
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white dark:text-gray-300"
+                  className="text-gray-600 hover:text-green-600 dark:text-gray-300"
                 >
                   Instagram
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white dark:text-gray-300"
+                  className="text-gray-600 hover:text-green-600 dark:text-gray-300"
                 >
                   Twitter
                 </a>

@@ -98,12 +98,12 @@ export const PcParts = () => {
                   <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     {product.description}
                   </p>
-                  <p className="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
+                  <p className="mt-2 text-xl font-bold text-green-600 dark:text-green-400">
                     {product.price} zł
                   </p>
                   <button
                     onClick={() => handleAddToCart(product.id)}
-                    className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    className="mt-4 w-full rounded bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                   >
                     Dodaj do koszyka
                   </button>

@@ -157,7 +157,7 @@ export const CartPage = () => {
             <div className="flex justify-between">
               <button
                 onClick={handleClearCart}
-                className="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                className="h-12 rounded-lg bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
               >
                 Wyczyść koszyk
               </button>
@@ -165,7 +165,7 @@ export const CartPage = () => {
                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                   Suma: {totalAmount} zł
                 </p>
-                <button className="mt-4 rounded-lg bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                <button className="mt-4 rounded-lg bg-green-600 px-6 py-2 text-white transition-colors hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
                   Przejdź do kasy
                 </button>
               </div>
